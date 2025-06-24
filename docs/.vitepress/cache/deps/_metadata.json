@@ -1,50 +1,41 @@
 {
-  "hash": "a589d58d",
-  "configHash": "92515094",
+  "hash": "3b540536",
+  "configHash": "7997f1d3",
   "lockfileHash": "7a20ba1c",
-  "browserHash": "08dccb36",
+  "browserHash": "6c052f05",
   "optimized": {
     "vue": {
       "src": "../../../../node_modules/.pnpm/vue@3.5.16/node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "88fdfc8b",
+      "fileHash": "3f4648b0",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../node_modules/.pnpm/@vue+devtools-api@7.7.7/node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "4168da40",
+      "fileHash": "a9205e20",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../node_modules/.pnpm/@vueuse+core@12.8.2/node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "1480368f",
+      "fileHash": "687d9887",
       "needsInterop": false
     },
     "element-plus": {
       "src": "../../../../node_modules/.pnpm/element-plus@2.7.4_vue@3.5.16/node_modules/element-plus/es/index.mjs",
       "file": "element-plus.js",
-      "fileHash": "5373a7f8",
+      "fileHash": "f29e99da",
       "needsInterop": false
     },
     "element-plus-fast-form": {
       "src": "../../../../node_modules/.pnpm/element-plus-fast-form@1.2.0_@element-plus+icons-vue@2.0.0_vue@3.5.16__element-plus@2.7.4_vue@3.5.16__vue@3.5.16/node_modules/element-plus-fast-form/dist/index.es.js",
       "file": "element-plus-fast-form.js",
-      "fileHash": "cf9b9bd3",
-      "needsInterop": false
-    },
-    "@element-plus/icons-vue": {
-      "src": "../../../../node_modules/.pnpm/@element-plus+icons-vue@2.0.0_vue@3.5.16/node_modules/@element-plus/icons-vue/dist/index.js",
-      "file": "@element-plus_icons-vue.js",
-      "fileHash": "dc566149",
+      "fileHash": "abcedaf9",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-OPMHOXNV": {
-      "file": "chunk-OPMHOXNV.js"
-    },
     "chunk-2PGDDOS4": {
       "file": "chunk-2PGDDOS4.js"
     },
