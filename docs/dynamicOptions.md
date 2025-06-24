@@ -1,5 +1,3 @@
-# dynamicOptions 页面
-
 ## 效果预览
 
 <DemoDynamicOptions />
@@ -22,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "element-plus-fast-form"; // 直接从源码引入
+import { useForm } from "element-plus-fast-form"; 
 
 import { formConfig, attrs } from "./config";
 import { ElMessage } from "element-plus";

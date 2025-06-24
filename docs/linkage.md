@@ -1,5 +1,3 @@
-# linkage 页面
-
 ## 效果预览
 
 <DemoLinkage />
@@ -63,7 +61,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "element-plus-fast-form"; // 直接从源码引入
+import { useForm } from "element-plus-fast-form"; 
 
 import { formConfigA, attrs, formConfigB, formConfigC } from "./config";
 import { ElMessage } from "element-plus";

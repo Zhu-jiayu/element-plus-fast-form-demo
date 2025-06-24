@@ -12,11 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-// import { useForm } from "../../../dist/index.umd.js"; // 从构建产物引入
-import { useForm } from "element-plus-fast-form"; // 直接从源码引入
-
-// import { useForm } from "element-plus-fast-form";
-// const { useForm } = ElementPlusFastForm;
+import { useForm } from "element-plus-fast-form"; 
 import { watch } from "vue";
 import { formConfig, attrs } from "./config";
 import { ElMessage } from "element-plus";

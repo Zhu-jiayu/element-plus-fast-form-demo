@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 import { resolve } from 'path'
 
 export default defineConfig({
+  base: '/element-plus-fast-form-demo/', // 添加此行，如果部署到 GitHub Pages 的子目录
   title: 'element-plus-fast-form 文档',
   description: '基于 Vue3 + Element Plus 的表单组件封装案例',
   themeConfig: {

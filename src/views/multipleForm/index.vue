@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "element-plus-fast-form"; // 直接从源码引入
+import { useForm } from "element-plus-fast-form"; 
 
 import * as formConfigA from "./configA";
 import * as formConfigB from "./configB";

@@ -15,8 +15,8 @@ importers:
         specifier: 2.7.4
         version: 2.7.4(vue@3.5.16)
       element-plus-fast-form:
-        specifier: ^1.1.0
-        version: 1.1.0(@element-plus/icons-vue@2.0.0(vue@3.5.16))(element-plus@2.7.4(vue@3.5.16))(vue@3.5.16)
+        specifier: ^1.2.0
+        version: 1.2.0(@element-plus/icons-vue@2.0.0(vue@3.5.16))(element-plus@2.7.4(vue@3.5.16))(vue@3.5.16)
       normalize.css:
         specifier: ^8.0.1
         version: 8.0.1
@@ -783,8 +783,8 @@ packages:
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
 
-  element-plus-fast-form@1.1.0:
-    resolution: {integrity: sha512-odkFhdLlZBPUBo4pvtUHXif52gmB7IyDAvhheVXzKwPoA+N1m19qQ+fCy5EPgvWa8gl79jHX7stYO3aEMTlUag==}
+  element-plus-fast-form@1.2.0:
+    resolution: {integrity: sha512-c2JttRufd76yQuHh8/j/7Js+vEgG6kNp5KXjwgQAaTmVoJoM4vONv7AyGWqR/9TogdG23DhGdH3FE1V72raRjQ==}
     peerDependencies:
       '@element-plus/icons-vue': ^2.0.0
       element-plus: ^2.7.4
@@ -859,9 +859,6 @@ packages:
       '@types/lodash-es': '*'
       lodash: '*'
       lodash-es: '*'
-
-  lodash.clonedeepwith@4.5.0:
-    resolution: {integrity: sha512-QRBRSxhbtsX1nc0baxSkkK5WlVTTm/s48DSukcGcWZwIyI8Zz+lB+kFiELJXtzfH4Aj6kMWQ1VWW4U5uUDgZMA==}
 
   lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
@@ -1745,11 +1742,10 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
-  element-plus-fast-form@1.1.0(@element-plus/icons-vue@2.0.0(vue@3.5.16))(element-plus@2.7.4(vue@3.5.16))(vue@3.5.16):
+  element-plus-fast-form@1.2.0(@element-plus/icons-vue@2.0.0(vue@3.5.16))(element-plus@2.7.4(vue@3.5.16))(vue@3.5.16):
     dependencies:
       '@element-plus/icons-vue': 2.0.0(vue@3.5.16)
       element-plus: 2.7.4(vue@3.5.16)
-      lodash.clonedeepwith: 4.5.0
       vue: 3.5.16
 
   element-plus@2.7.4(vue@3.5.16):
@@ -1877,8 +1873,6 @@ snapshots:
       '@types/lodash-es': 4.17.12
       lodash: 4.17.21
       lodash-es: 4.17.21
-
-  lodash.clonedeepwith@4.5.0: {}
 
   lodash@4.17.21: {}
 

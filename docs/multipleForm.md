@@ -1,5 +1,3 @@
-# multipleForm 页面
-
 ## 效果预览
 
 <DemoMultipleForm />
@@ -27,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "element-plus-fast-form"; // 直接从源码引入
+import { useForm } from "element-plus-fast-form"; 
 
 import * as formConfigA from "./configA";
 import * as formConfigB from "./configB";
@@ -110,7 +108,7 @@ watch(
 // 新增表单样式配置
 export const attrs = {
   colProps: {
-    span: 6,
+    span: 12,
   },
   rowProps: {
     gutter: 24,
@@ -144,9 +142,6 @@ export const formConfig = [
   },
 
   {
-    colProps: {
-      span: 18,
-    },
     component: "el-radio-group",
     formItemProps: {
       prop: "el-radio-group",
@@ -169,7 +164,7 @@ export const formConfig = [
 // 新增表单样式配置
 export const attrs = {
   colProps: {
-    span: 6,
+    span: 12,
   },
   rowProps: {
     gutter: 24,
@@ -203,9 +198,7 @@ export const formConfig = [
   },
 
   {
-    colProps: {
-      span: 18,
-    },
+
     component: "el-radio-group",
     formItemProps: {
       prop: "el-radio-group",

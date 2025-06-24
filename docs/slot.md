@@ -1,5 +1,3 @@
-# slot 页面
-
 ## 效果预览
 
 <DemoSlot />
@@ -87,7 +85,7 @@ const reset = () => {
 // 新增表单样式配置
 export const attrs = {
   colProps: {
-    soan: 12,
+    span: 12,
   },
   rowProps: {
     gutter: 24,

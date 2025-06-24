@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "element-plus-fast-form"; // 直接从源码引入
+import { useForm } from "element-plus-fast-form"; 
 // import { useForm } from "../../../dist/index.umd.js"; // 从构建产物引入
 
 

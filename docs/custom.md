@@ -1,5 +1,3 @@
-# custom 页面
-
 ## 效果预览
 
 <DemoCustom />
