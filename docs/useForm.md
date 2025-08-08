@@ -78,6 +78,11 @@ watch(
 
 ### config.ts
 ```ts
+const initials = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+const moreOptions = Array.from({ length: 10000 }).map((_, idx) => ({
+  value: `Option ${idx + 1}`,
+  label: `${initials[idx % 10]}${idx}`,
+}));
 
 // 新增表单样式配置
 export const attrs = {
@@ -85,12 +90,12 @@ export const attrs = {
     span: 12,
   },
   rowProps: {
-    gutter: 24,
+    gutter: 12,
   },
   formProps: {
     "label-position": "right",
     "label-suffix": "：",
-    "label-width": "auto",
+    "label-width": "160px",
   },
 };
 
@@ -124,6 +129,7 @@ export const formConfig = [
     componentProps: {
       placeholder: "去输入",
     },
+    suffix: "%",
   },
 
   {
@@ -135,9 +141,22 @@ export const formConfig = [
     componentProps: {
       placeholder: "去选择",
       options: [
-        { label: "男", value: "male" },
-        { label: "女", value: "female" },
+        { label: "A", value: "A" },
+        { label: "B", value: "B" },
       ],
+      filterable: true,
+    },
+  },
+  {
+    component: "el-select-v2",
+    formItemProps: {
+      prop: "el-select2",
+      label: "虚拟化下拉",
+    },
+    componentProps: {
+      placeholder: "去选择",
+      options: moreOptions,
+      filterable: true,
     },
   },
   {
@@ -235,7 +254,9 @@ export const formConfig = [
       max: 99,
       precision: 0,
       "controls-position": "right",
+      style: { width: "100%" },
     },
+    suffix: "元",
   },
   {
     component: "el-date-picker",
@@ -298,7 +319,6 @@ export const formConfig = [
       placeholder: "去选择",
     },
   },
-  
 ];
 
 ```

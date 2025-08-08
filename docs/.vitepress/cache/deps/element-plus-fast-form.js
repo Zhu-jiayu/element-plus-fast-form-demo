@@ -5932,7 +5932,7 @@ function _sfc_render283(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var zoom_out_default = plugin_vue_export_helper_default(_sfc_main283, [["render", _sfc_render283], ["__file", "/home/runner/work/element-plus-icons/element-plus-icons/packages/vue/src/components/zoom-out.vue"]]);
 
-// node_modules/.pnpm/element-plus-fast-form@1.2.3_@element-plus+icons-vue@2.0.0_vue@3.5.16__element-plus@2.7.4_vue@3.5.16__vue@3.5.16/node_modules/element-plus-fast-form/dist/index.es.js
+// node_modules/.pnpm/element-plus-fast-form@1.2.4_@element-plus+icons-vue@2.0.0_vue@3.5.16__element-plus@2.7.4_vue@3.5.16__vue@3.5.16/node_modules/element-plus-fast-form/dist/index.es.js
 var EOptions = ((EOptions2) => {
   EOptions2["el-select"] = "el-option";
   EOptions2["el-radio-group"] = "el-radio";
@@ -5941,6 +5941,9 @@ var EOptions = ((EOptions2) => {
   EOptions2["el-tree-select"] = "span";
   return EOptions2;
 })(EOptions || {});
+var virtualizedComponentMap = {
+  "el-select-v2": "options"
+};
 var InitialValueMap = {
   "el-checkbox-group": []
 };
@@ -6159,12 +6162,11 @@ var FormCore = class {
       style: {
         width: ((_e = (_d = itemConfig.componentProps) == null ? void 0 : _d.style) == null ? void 0 : _e.width) || "100%"
       }
-    }, ((_g = (_f = itemConfig == null ? void 0 : itemConfig.componentProps) == null ? void 0 : _f.options) == null ? void 0 : _g.length) ? {
-      default: ({
-        data
-      }) => {
+    }, ((_g = (_f = itemConfig == null ? void 0 : itemConfig.componentProps) == null ? void 0 : _f.options) == null ? void 0 : _g.length) && !virtualizedComponentMap.hasOwnProperty(itemConfig.component) ? {
+      default: (c) => {
         var _a2;
-        return EOptions[itemConfig.component] == "span" ? data.label : h(Fragment, {}, [...(((_a2 = itemConfig == null ? void 0 : itemConfig.componentProps) == null ? void 0 : _a2.options) || []).map((i) => {
+        const data = (c == null ? void 0 : c.data) || {};
+        return EOptions[itemConfig.component] == "span" ? data == null ? void 0 : data.label : h(Fragment, {}, [...(((_a2 = itemConfig == null ? void 0 : itemConfig.componentProps) == null ? void 0 : _a2.options) || []).map((i) => {
           return h(resolveComponent(EOptions[itemConfig.component]), {
             key: i.key || i.value,
             ...i
