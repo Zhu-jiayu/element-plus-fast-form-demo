@@ -67,6 +67,7 @@ export default defineConfig({
           { text: "基础用法", link: "/useForm" },
           { text: "slot插槽", link: "/slot" },
           { text: "自定义组件", link: "/custom" },
+          { text: "文本组件", link: "/string" },
           { text: "嵌套表单", link: "/formlist" },
           { text: "多表单实例", link: "/multipleForm" },
           { text: "动态组件属性", link: "/dynamicOptions" },

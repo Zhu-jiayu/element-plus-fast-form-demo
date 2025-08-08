@@ -14,6 +14,8 @@
     <el-button @click="remove" type="primary">删除第2个</el-button>
     <el-button @click="submit" type="primary">提交</el-button>
     <el-button @click="reset">重置</el-button>
+    <el-button @click="setFormDisabled(false)">启用表单</el-button>
+    <el-button @click="setFormDisabled(true)">禁用表单</el-button>
   </el-space>
 </template>
 
@@ -22,7 +24,7 @@ import { useForm } from "element-plus-fast-form";
 import { formConfig, attrs } from "./config";
 import { ElMessage } from "element-plus";
 
-const { FastForm, formValue, formRef, addItem, removeItem } = useForm({
+const { FastForm, formValue, formRef, addItem, removeItem, setFormDisabled } = useForm({
   ...attrs,
   formConfig,
 });

@@ -57,6 +57,21 @@ export const formConfig = [
     children: [
       [
         {
+          component: 'span',
+          formItemProps: {
+          },
+          componentProps: {
+            style: {
+              fontSize: '18px',
+              marginLeft: '-90px'
+            }
+          },
+          defaultValue: "标题",
+          colProps: {
+            span: 24,
+          },
+        },
+        {
           component: "el-input",
           formItemProps: {
             prop: "el-input",

@@ -20,6 +20,12 @@ export const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "custom" */ "../views/custom/index.vue"),
   },
   {
+    path: "/string",
+    name: "文本组件",
+    component: () =>
+      import(/* webpackChunkName: "string" */ "../views/string/index.vue"),
+  },
+  {
     path: "/formlist",
     name: "嵌套表单",
     component: () =>
