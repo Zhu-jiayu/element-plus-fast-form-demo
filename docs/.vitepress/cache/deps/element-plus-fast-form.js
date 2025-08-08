@@ -5932,7 +5932,7 @@ function _sfc_render283(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var zoom_out_default = plugin_vue_export_helper_default(_sfc_main283, [["render", _sfc_render283], ["__file", "/home/runner/work/element-plus-icons/element-plus-icons/packages/vue/src/components/zoom-out.vue"]]);
 
-// node_modules/.pnpm/element-plus-fast-form@1.2.0_@element-plus+icons-vue@2.0.0_vue@3.5.16__element-plus@2.7.4_vue@3.5.16__vue@3.5.16/node_modules/element-plus-fast-form/dist/index.es.js
+// node_modules/.pnpm/element-plus-fast-form@1.2.3_@element-plus+icons-vue@2.0.0_vue@3.5.16__element-plus@2.7.4_vue@3.5.16__vue@3.5.16/node_modules/element-plus-fast-form/dist/index.es.js
 var EOptions = ((EOptions2) => {
   EOptions2["el-select"] = "el-option";
   EOptions2["el-radio-group"] = "el-radio";
@@ -6052,13 +6052,15 @@ function cloneDeepWith(value, customizer, map = /* @__PURE__ */ new WeakMap()) {
       return value;
   }
 }
-var groupRow = "_groupRow_1d203_8";
-var border = "_border_1d203_13";
-var operate = "_operate_1d203_21";
+var groupRow = "_groupRow_1tnu4_8";
+var border = "_border_1tnu4_13";
+var operate = "_operate_1tnu4_21";
+var hasSuffix = "_hasSuffix_1tnu4_27";
 var styles = {
   groupRow,
   border,
-  operate
+  operate,
+  hasSuffix
 };
 function _isSlot(s) {
   return typeof s === "function" || Object.prototype.toString.call(s) === "[object Object]" && !isVNode(s);
@@ -6093,16 +6095,28 @@ var FormCore = class {
     this.addItem = this.addItem.bind(this);
     this.removeItem = this.removeItem.bind(this);
   }
+  _generateSuffix(itemConfig) {
+    return h("span", {}, [itemConfig == null ? void 0 : itemConfig.suffix]);
+  }
   _generateComponent(itemConfig, slots, nestedKey) {
-    var _a;
+    var _a, _b, _c;
+    let component = null;
     if (itemConfig.component === "slot") {
-      return this._generateSlot(itemConfig, slots, nestedKey);
+      component = this._generateSlot(itemConfig, slots, nestedKey);
     } else if (this._isVueComponent(itemConfig.component)) {
-      return this._generateCustomComponent(itemConfig, nestedKey);
+      component = this._generateCustomComponent(itemConfig, nestedKey);
     } else if (typeof (itemConfig == null ? void 0 : itemConfig.component) === "string" && ((_a = itemConfig == null ? void 0 : itemConfig.component) == null ? void 0 : _a.startsWith("el-"))) {
-      return this._generateElementComponent(itemConfig, nestedKey);
+      component = this._generateElementComponent(itemConfig, nestedKey);
     }
-    return null;
+    if (itemConfig == null ? void 0 : itemConfig.suffix) {
+      component = h("div", {
+        className: styles.hasSuffix,
+        style: {
+          width: (_c = (_b = itemConfig.componentProps) == null ? void 0 : _b.style) == null ? void 0 : _c.width
+        }
+      }, [component, this._generateSuffix(itemConfig)]);
+    }
+    return component;
   }
   _generateNestedData(nestedKey, prop, value) {
     const lastData = {
@@ -6131,7 +6145,7 @@ var FormCore = class {
     return Object.prototype.hasOwnProperty.call(arg, "render") || Object.prototype.hasOwnProperty.call(arg, "setup");
   }
   _generateElementComponent(itemConfig, nestedKey) {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d, _e, _f, _g;
     return h(resolveComponent(itemConfig.component), {
       ...itemConfig.componentProps,
       modelValue: nestedKey ? (_c = (_b = (_a = this.formValue) == null ? void 0 : _a[nestedKey.prop]) == null ? void 0 : _b[nestedKey.key]) == null ? void 0 : _c[itemConfig.formItemProps.prop] : this.formValue[itemConfig.formItemProps.prop],
@@ -6141,8 +6155,11 @@ var FormCore = class {
         } else {
           this.formValue[itemConfig.formItemProps.prop] = value;
         }
+      },
+      style: {
+        width: ((_e = (_d = itemConfig.componentProps) == null ? void 0 : _d.style) == null ? void 0 : _e.width) || "100%"
       }
-    }, ((_e = (_d = itemConfig == null ? void 0 : itemConfig.componentProps) == null ? void 0 : _d.options) == null ? void 0 : _e.length) ? {
+    }, ((_g = (_f = itemConfig == null ? void 0 : itemConfig.componentProps) == null ? void 0 : _f.options) == null ? void 0 : _g.length) ? {
       default: ({
         data
       }) => {
@@ -6496,7 +6513,7 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
 }
 if (typeof document !== "undefined") {
   const style = document.createElement("style");
-  style.textContent = "._form-item_1d203_1 :deep(._el-form-item__content_1d203_1 > *){width:100%}._form-item_1d203_1 .el-form-item__content>*{width:100%}._groupRow_1d203_8{width:100%;padding:0 24px 24px}._border_1d203_13{border:1px solid #dcdfe6;padding:12px 0;margin-bottom:12px;border-radius:8px;position:relative}._operate_1d203_21{position:absolute;right:8px;bottom:8px}\n";
+  style.textContent = "._form-item_1tnu4_1 :deep(._el-form-item__content_1tnu4_1 > *){width:100%}._form-item_1tnu4_1 .el-form-item__content>*{width:100%}._groupRow_1tnu4_8{width:100%;padding:0 24px 24px}._border_1tnu4_13{border:1px solid #dcdfe6;padding:12px 0;margin-bottom:12px;border-radius:8px;position:relative}._operate_1tnu4_21{position:absolute;right:8px;bottom:8px}._hasSuffix_1tnu4_27{display:flex;align-items:center}._hasSuffix_1tnu4_27>*:last-child{margin-left:4px;font-size:16px}._hasSuffix_1tnu4_27>*:first-child{flex:1;width:unset!important}\n";
   document.head.appendChild(style);
 }
 export {

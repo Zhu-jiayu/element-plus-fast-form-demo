@@ -90,6 +90,8 @@ export interface IFormconfig {
   children?: Array<Array<IFormconfig>>;
   /** 默认值 */
   defaultValue?: any;
+  /** 后缀文字（如单位：%、元等） */
+  suffix?: string;
 }
 ```
 
