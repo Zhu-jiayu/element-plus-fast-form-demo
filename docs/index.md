@@ -1,14 +1,78 @@
 # element-plus-fast-form 使用说明
 
-本项目基于 Element Plus，采用“配置驱动+类封装+组合式 API”模式，适合中后台、低代码、动态表单等复杂场景。
+本项目基于 Element Plus，采用"配置驱动+类封装+组合式 API"模式，适合中后台、低代码、动态表单等复杂场景。
 
 
 ## 目录
 
+- [功能特性](#功能特性)
+- [预览](#预览)
 - [安装与引入](#安装与引入)
 - [类型定义（types）](#类型定义)
 - [核心 Hooks](#核心-hooks)
-- [预览](#预览)
+
+
+
+## 功能特性
+
+### 1. 多组件类型支持
+- **Element Plus 组件**：支持所有 Element Plus 表单组件（el-input、el-select、el-cascader 等）
+- **自定义 Vue 组件**：支持传入自定义组件，自动传递 formValue 和相关方法
+- **插槽组件**：使用 'slot' 类型实现完全自定义的表单项渲染
+- **文本组件**：支持纯文本或 HTML 字符串组件渲染
+
+### 2. 后缀文字支持  
+- 表单项支持添加后缀文字，常用于显示单位或说明
+- 自动调整布局，确保后缀文字正确显示
+- 支持与表单项宽度的自适应配合
+
+### 3. 异步配置支持
+- **响应式配置**：支持 reactive 和 ref 包装的配置对象
+- **动态加载**：支持异步获取表单配置并自动更新渲染
+- **批量替换**：提供 setFormConfigs 方法实现整个表单结构的动态切换
+
+### 4. 嵌套表单（表单列表）
+- 支持数组形式的嵌套表单结构
+- 提供 addItem 和 removeItem 方法动态增删列表项
+- 每个列表项可包含多个表单字段
+- 支持在嵌套表单中使用插槽或自定义组件
+
+### 5. 表单联动功能
+- **方法联动**：通过 hooks 方法实现表单项之间的联动
+- **组件联动**：在自定义组件中实现复杂的联动逻辑
+- **插槽联动**：通过插槽实现灵活的联动交互
+
+### 6. 多表单实例管理
+- 同一页面支持多个独立的表单实例
+- 每个表单实例拥有独立的配置、数据和验证
+
+### 7. 动态表单操作
+- **组件属性动态修改**：运行时修改表单项的 options、placeholder 等属性
+- **表单项增删改**：动态添加、删除、修改表单项配置
+- **表单禁用控制**：支持整个表单或单个表单项的禁用状态切换
+
+### 8. 灵活的布局系统
+- 基于 Element Plus 的 Row/Col 栅格系统
+- 支持响应式布局配置
+- 表单项自动适应容器宽度
+- 支持自定义表单项和整体布局样式
+
+### 9. 完整的表单验证
+- 继承 Element Plus 的完整验证体系
+- 支持同步和异步验证规则
+- 提供表单实例引用，支持手动验证控制
+
+### 10. TypeScript 支持
+- 完整的类型定义覆盖
+- 智能提示和类型检查
+- 类型安全的 API 设计
+
+
+
+## 预览
+[https://zhu-jiayu.github.io/element-plus-fast-form-demo/](https://zhu-jiayu.github.io/element-plus-fast-form-demo/)
+
+
 
 
 ## 安装与引入
@@ -161,6 +225,8 @@ export interface IUseForm {
   setFormValue: (formData: Record<string, any>) => void;
   /** 动态设置表单项配置 */
   setFormConfig: (prop: string, config: Partial<IFormconfig>) => void;
+  /** 批量替换整个表单配置 */
+  setFormConfigs: (newFormConfig: IFormconfig[]) => void;
   /** 动态添加表单项 */
   addFormConfig: (config: IFormconfig, index?: number) => void;
   /** 动态删除表单项 */
@@ -184,8 +250,9 @@ function useForm(config: IFormProps): IUseForm
 
 | 方法名                | 入参类型                                   | 出参类型         | 说明                       |
 |-----------------------|--------------------------------------------|------------------|----------------------------|
-| useForm               | IFormProps                                 | IUseForm         | 获取表单实例和所有操作方法 |
+| useForm               | IFormProps \| Reactive\<IFormProps\> \| Ref\<IFormProps\>                                | IUseForm         | 获取表单实例和所有操作方法 |
 
+注意点：入参类型如果是响应式数据，只作用于表单初始化时的异步渲染，如果需要修改表单属性，请使用setFormConfig 或 setComponentProps方法。
 
 
 ### useForm 返回属性
@@ -207,6 +274,7 @@ function useForm(config: IFormProps): IUseForm
 | setComponentProps  | prop: string, componentProps: Record<string, any> | void     | 动态设置表单项组件属性                   |
 | setFormValue       | formData: Record<string, any>                    | void     | 动态设置表单数据                         |
 | setFormConfig      | prop: string, config: Partial<IFormconfig>       | void     | 动态设置表单项配置                       |
+| setFormConfigs     | newFormConfig: IFormconfig[]                     | void     | 批量替换整个表单配置                     |
 | addFormConfig      | config: IFormconfig, index?: number              | void     | 动态添加表单项                           |
 | removeFormConfig   | props: string[]                                  | void     | 动态删除表单项                           |
 | setFormDisabled    | disabled: boolean                                | void     | 禁用/启用整个表单                        |
@@ -229,6 +297,9 @@ function useForm(config: IFormProps): IUseForm
 - `setFormConfig(prop, config)`  
   动态修改某个表单项的配置（如校验规则、label、组件类型等）。
 
+- `setFormConfigs(newFormConfig)`  
+  **批量替换整个表单配置**，用于异步加载配置或动态切换表单结构。会清空原有配置和表单值，重新初始化。
+
 - `addFormConfig(config, index?)`  
   动态添加表单项，可指定插入位置。
 
@@ -237,7 +308,3 @@ function useForm(config: IFormProps): IUseForm
 
 - `setFormDisabled(disabled)`  
   禁用或启用整个表单。
-
-
-## 方法示例
-[https://zhu-jiayu.github.io/element-plus-fast-form-demo/](https://zhu-jiayu.github.io/element-plus-fast-form-demo/)

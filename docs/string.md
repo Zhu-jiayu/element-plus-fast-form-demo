@@ -28,7 +28,7 @@
   </template>
   
   <script lang="ts" setup>
-  import { useForm } from "@/index";
+  import { useForm } from "element-plus-fast-form";
   import { formConfig, attrs } from "./config";
   import { ElMessage } from "element-plus";
   

@@ -26,8 +26,14 @@ export const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "string" */ "../views/string/index.vue"),
   },
   {
+    path: "/setFormConfigs",
+    name: "异步表单",
+    component: () =>
+      import(/* webpackChunkName: "async" */ "../views/setFormConfigs/index.vue"),
+  },
+  {
     path: "/formlist",
-    name: "嵌套表单",
+    name: "嵌套表单(表单列表)",
     component: () =>
       import(/* webpackChunkName: "formlist" */ "../views/formlist/index.vue"),
   },

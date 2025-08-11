@@ -68,7 +68,8 @@ export default defineConfig({
           { text: "slot插槽", link: "/slot" },
           { text: "自定义组件", link: "/custom" },
           { text: "文本组件", link: "/string" },
-          { text: "嵌套表单", link: "/formlist" },
+          { text: "异步表单", link: "/setFormConfigs" },
+          { text: "嵌套表单(表单列表)", link: "/formlist" },
           { text: "多表单实例", link: "/multipleForm" },
           { text: "动态组件属性", link: "/dynamicOptions" },
           { text: "表单项增删改", link: "/setFormConfig" },
@@ -76,6 +77,7 @@ export default defineConfig({
         ],
       },
     ],
+
     outline: false,
   },
   vite: {

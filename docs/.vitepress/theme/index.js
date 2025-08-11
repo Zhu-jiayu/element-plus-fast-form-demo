@@ -7,6 +7,7 @@ import DemoFormlist from '../../../src/views/formlist/index.vue'
 import DemoLinkage from '../../../src/views/linkage/index.vue'
 import DemoMultipleForm from '../../../src/views/multipleForm/index.vue'
 import DemoSetFormConfig from '../../../src/views/setFormConfig/index.vue'
+import DemoSetFormConfigs from '../../../src/views/setFormConfigs/index.vue'
 import DemoSlot from '../../../src/views/slot/index.vue'
 import DemoString from '../../../src/views/string/index.vue'
 import DemoUseForm from '../../../src/views/useForm/index.vue'
@@ -21,6 +22,7 @@ export default {
     app.component('DemoLinkage', DemoLinkage)
     app.component('DemoMultipleForm', DemoMultipleForm)
     app.component('DemoSetFormConfig', DemoSetFormConfig)
+    app.component('DemoSetFormConfigs', DemoSetFormConfigs)
     app.component('DemoSlot', DemoSlot)
     app.component('DemoString', DemoString)
     app.component('DemoUseForm', DemoUseForm)

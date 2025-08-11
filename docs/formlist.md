@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "@/index";
+import { useForm } from "element-plus-fast-form";
 import { formConfig, attrs } from "./config";
 import { ElMessage } from "element-plus";
 
@@ -188,7 +188,7 @@ export const formConfig = [
             span: 24,
           },
           component: defineAsyncComponent<any>(
-            () => import("@examples/components/Avatar-upload/index.vue")
+            () => import("@/components/Avatar-upload/index.vue")
           ),
           formItemProps: {
             prop: "avatar",
