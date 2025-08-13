@@ -10,12 +10,13 @@ export const attrs = {
     span: 12,
   },
   rowProps: {
-    gutter: 12,
+    gutter: 24,
   },
   formProps: {
     "label-position": "right",
     "label-suffix": "：",
-    "label-width": "160px",
+    "label-width": "160",
+    "disabled": true,
   },
 };
 
@@ -37,8 +38,8 @@ export const formConfig = [
             value: string,
             callback: (arg0?: Error | undefined) => void
           ) => {
-            if (/\w/.test(value)) {
-              return callback(new Error("请输入非字母数字下划线字符"));
+            if (!/^\d+$/.test(value)) {
+              return callback(new Error("请输入数字"));
             }
             callback();
           },
@@ -187,6 +188,7 @@ export const formConfig = [
     componentProps: {
       placeholder: "去输入",
       type: "date",
+      "value-format": "YYYY-MM-DD",
     },
   },
   {
@@ -237,6 +239,7 @@ export const formConfig = [
     },
     componentProps: {
       placeholder: "去选择",
+      "value-format": "HH:mm:ss",
     },
   },
 ];

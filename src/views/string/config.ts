@@ -1,7 +1,7 @@
 // 新增表单样式配置
 export const attrs = {
   colProps: {
-    span: 12,
+    span: 8,
   },
   rowProps: {
     gutter: 24,
@@ -11,52 +11,23 @@ export const attrs = {
     "label-suffix": "：",
     "label-width": "160",
   },
+  showOperate: false,
 };
 
 // 新增表单配置
 export const formConfig = [
   {
-    component: "el-input",
-    formItemProps: {
-      prop: "el-input",
-      label: "el-input",
-      rules: [
-        {
-          required: true,
-          message: "请填写完整",
-        },
-        {
-          validator: (
-            _rule: any,
-            value: string,
-            callback: (arg0?: Error | undefined) => void
-          ) => {
-            if (/\w/.test(value)) {
-              return callback(new Error("请输入非字母数字下划线字符"));
-            }
-            callback();
-          },
-          trigger: ["change", "blur"],
-        },
-      ],
-    },
-    componentProps: {
-      placeholder: "去输入",
-    },
-  },
-
-  {
     component: "span",
     formItemProps: {
-        label: '姓名',
+      label: "年级",
     },
     componentProps: {
       style: {
         fontSize: "18px",
-        color: 'green'
+        color: "green",
       },
     },
-    defaultValue: "A1",
+    defaultValue: "一年级",
   },
 
   {
@@ -68,62 +39,41 @@ export const formConfig = [
       [
         {
           component: "span",
-          formItemProps: {},
+          formItemProps: {
+            "label-width": "0",
+          },
           componentProps: {
             style: {
               fontSize: "18px",
-              marginLeft: "-90px",
-              color: 'red'
             },
           },
-          defaultValue: "标题",
+          defaultValue: "一班",
           colProps: {
             span: 24,
           },
         },
         {
-          component: "el-input",
+          component: "span",
           formItemProps: {
-            prop: "el-input",
-            label: "el-input",
-            rules: [
-              {
-                required: true,
-                message: "请填写完整",
-              },
-            ],
+            label: "姓名",
           },
-          componentProps: {
-            placeholder: "去输入",
-          },
+          defaultValue: "kun",
         },
         {
-          component: "el-radio-group",
+          component: "span",
           formItemProps: {
-            prop: "el-radio-group",
-            label: "el-radio-group",
+            label: "年龄",
           },
-          componentProps: {
-            placeholder: "去选择",
-            options: [
-              { label: "是", value: "Y" },
-              { label: "否", value: "N" },
-            ],
-          },
+          defaultValue: "19",
         },
 
         {
-          component: "slot",
+          component: "span",
           formItemProps: {
-            prop: "points2",
-            label: "slot",
-            rules: [
-              {
-                required: true,
-                message: "请填写完整",
-              },
-            ],
+            prop: "hobbies",
+            label: "爱好",
           },
+          defaultValue: "唱跳rap篮球",
         },
       ],
     ],

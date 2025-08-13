@@ -4,8 +4,9 @@
 
 ## 示例代码
 
-### index.vue
-```vue
+::: code-group
+
+```vue [index.vue]
 <template>
   <h3>动态组件属性</h3>
   <FastForm />
@@ -176,8 +177,7 @@ function required() {
 
 ```
 
-### config.ts
-```ts
+```ts [config.ts]
 
 // 新增表单样式配置
 export const attrs = {
@@ -339,4 +339,6 @@ export const formConfig = [
 ];
 
 ```
+
+:::
 

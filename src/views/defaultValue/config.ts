@@ -1,93 +1,3 @@
-## 效果预览
-
-<DemoUseForm />
-
-## 示例代码
-
-::: code-group
-
-```vue [index.vue]
-<template>
-  <h3>基础示例</h3>
-  <FastForm />
-
-  <el-space>
-    <el-button @click="submit" type="primary">提交</el-button>
-    <el-button @click="reset">重置</el-button>
-    <el-button @click="edit">赋值</el-button>
-    <el-button @click="setFormDisabled(false)">启用表单</el-button>
-    <el-button @click="setFormDisabled(true)">禁用表单</el-button>
-  </el-space>
-</template>
-
-<script lang="ts" setup>
-import { useForm } from "element-plus-fast-form";
-import { ref, watch, reactive } from "vue";
-import { formConfig, attrs } from "./config";
-import { ElMessage } from "element-plus";
-
-const {
-  FastForm,
-  formValue,
-  formRef,
-  rawFormValue,
-  setFormDisabled,
-  setFormValue,
-} = useForm({
-  ...attrs,
-  formConfig
-});
-const submit = () => {
-  if (formRef.value) {
-    formRef.value.validate((valid: boolean) => {
-      if (valid) {
-        ElMessage.warning("查看控制台");
-        console.log({ formValue, rawFormValue });
-      }
-    });
-  }
-};
-const reset = () => {
-  if (formRef.value) {
-    formRef.value.resetFields();
-  }
-};
-function edit() {
-  setFormValue({
-    "el-input": "123",
-    "el-select": "A",
-    "el-select2": "Option 1",
-    "el-cascader": ['艺术', '1-1'],
-    "el-select-multiple": ["A", "B"],
-    "el-radio-group": "Y",
-    "el-checkbox-group": ["1", "2"],
-    "el-input-number": 10,
-    "el-date-picker": "2021-01-01",
-    "el-time-picker": "12:00:00",
-    "el-tree-select": "beijing",
-  });
-}
-
-watch(
-  () => rawFormValue,
-  (newValue) => {
-    console.log("watch----rawFormValue", newValue);
-  },
-  { deep: true, immediate: true }
-);
-
-watch(
-  () => formValue,
-  (newValue) => {
-    console.log("watch----formValue", newValue);
-  },
-  { deep: true, immediate: true }
-);
-</script>
-
-```
-
-```ts [config.ts]
 const initials = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
 const moreOptions = Array.from({ length: 10000 }).map((_, idx) => ({
   value: `Option ${idx + 1}`,
@@ -106,7 +16,19 @@ export const attrs = {
     "label-position": "right",
     "label-suffix": "：",
     "label-width": "160",
-    "disabled": true,
+    model: {
+      "el-input": "123",
+      "el-select": "A",
+      "el-select2": "Option 1",
+      "el-cascader": ["艺术", "1-1"],
+      "el-select-multiple": ["A", "B"],
+      "el-radio-group": "Y",
+      "el-checkbox-group": ["1", "2"],
+      "el-input-number": 10,
+      "el-date-picker": "2021-01-01",
+      "el-time-picker": "12:00:00",
+      "el-tree-select": "beijing",
+    },
   },
 };
 
@@ -122,25 +44,13 @@ export const formConfig = [
           required: true,
           message: "请填写完整",
         },
-        {
-          validator: (
-            _rule: any,
-            value: string,
-            callback: (arg0?: Error | undefined) => void
-          ) => {
-            if (!/^\d+$/.test(value)) {
-              return callback(new Error("请输入数字"));
-            }
-            callback();
-          },
-          trigger: ["change", "blur"],
-        },
       ],
     },
     componentProps: {
       placeholder: "去输入",
     },
     suffix: "%",
+    defaultValue: "100",
   },
 
   {
@@ -333,8 +243,3 @@ export const formConfig = [
     },
   },
 ];
-
-```
-
-:::
-

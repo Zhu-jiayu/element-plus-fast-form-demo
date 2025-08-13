@@ -4,8 +4,9 @@
 
 ## 示例代码
 
-### index.vue
-```vue
+::: code-group
+
+```vue [index.vue]
 <template>
   <h3>slot插槽</h3>
   <FastForm>
@@ -79,8 +80,7 @@ const reset = () => {
 
 ```
 
-### config.ts
-```ts
+```ts [config.ts]
 
 // 新增表单样式配置
 export const attrs = {
@@ -128,4 +128,6 @@ export const formConfig = [
 ];
 
 ```
+
+:::
 

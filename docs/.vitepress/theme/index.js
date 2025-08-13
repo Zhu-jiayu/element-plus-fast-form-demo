@@ -2,9 +2,12 @@ import DefaultTheme from 'vitepress/theme'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import DemoCustom from '../../../src/views/custom/index.vue'
+import DemoDefaultValue from '../../../src/views/defaultValue/index.vue'
 import DemoDynamicOptions from '../../../src/views/dynamicOptions/index.vue'
 import DemoFormlist from '../../../src/views/formlist/index.vue'
 import DemoLinkage from '../../../src/views/linkage/index.vue'
+import DemoLinkage2 from '../../../src/views/linkage2/index.vue'
+import DemoLinkage3 from '../../../src/views/linkage3/index.vue'
 import DemoMultipleForm from '../../../src/views/multipleForm/index.vue'
 import DemoSetFormConfig from '../../../src/views/setFormConfig/index.vue'
 import DemoSetFormConfigs from '../../../src/views/setFormConfigs/index.vue'
@@ -17,9 +20,12 @@ export default {
   enhanceApp({ app }) {
     app.use(ElementPlus)
     app.component('DemoCustom', DemoCustom)
+    app.component('DemoDefaultValue', DemoDefaultValue)
     app.component('DemoDynamicOptions', DemoDynamicOptions)
     app.component('DemoFormlist', DemoFormlist)
     app.component('DemoLinkage', DemoLinkage)
+    app.component('DemoLinkage2', DemoLinkage2)
+    app.component('DemoLinkage3', DemoLinkage3)
     app.component('DemoMultipleForm', DemoMultipleForm)
     app.component('DemoSetFormConfig', DemoSetFormConfig)
     app.component('DemoSetFormConfigs', DemoSetFormConfigs)

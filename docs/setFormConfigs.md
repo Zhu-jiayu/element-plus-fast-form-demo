@@ -4,8 +4,9 @@
 
 ## 示例代码
 
-### index.vue
-```vue
+::: code-group
+
+```vue [index.vue]
 <template>
   <h3>异步表单示例</h3>
   <el-divider>setFormConfigs 配置</el-divider>
@@ -66,8 +67,7 @@ const timer2 = setInterval(() => {
 
 ```
 
-### config.ts
-```ts
+```ts [config.ts]
 const initials = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
 const moreOptions = Array.from({ length: 10000 }).map((_, idx) => ({
   value: `Option ${idx + 1}`,
@@ -313,4 +313,6 @@ export const formConfig = [
 ];
 
 ```
+
+:::
 

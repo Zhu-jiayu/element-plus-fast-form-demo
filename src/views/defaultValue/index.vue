@@ -1,18 +1,16 @@
 <template>
-  <h3>基础示例</h3>
+  <h3>表单默认值</h3>
   <FastForm />
 
   <el-space>
     <el-button @click="submit" type="primary">提交</el-button>
     <el-button @click="reset">重置</el-button>
-    <el-button @click="edit">赋值</el-button>
-    <el-button @click="setFormDisabled(false)">启用表单</el-button>
-    <el-button @click="setFormDisabled(true)">禁用表单</el-button>
   </el-space>
 </template>
 
 <script lang="ts" setup>
 import { useForm } from "element-plus-fast-form";
+
 import { ref, watch, reactive } from "vue";
 import { formConfig, attrs } from "./config";
 import { ElMessage } from "element-plus";
@@ -22,7 +20,6 @@ const {
   formValue,
   formRef,
   rawFormValue,
-  setFormDisabled,
   setFormValue,
 } = useForm({
   ...attrs,
@@ -43,21 +40,6 @@ const reset = () => {
     formRef.value.resetFields();
   }
 };
-function edit() {
-  setFormValue({
-    "el-input": "123",
-    "el-select": "A",
-    "el-select2": "Option 1",
-    "el-cascader": ['艺术', '1-1'],
-    "el-select-multiple": ["A", "B"],
-    "el-radio-group": "Y",
-    "el-checkbox-group": ["1", "2"],
-    "el-input-number": 10,
-    "el-date-picker": "2021-01-01",
-    "el-time-picker": "12:00:00",
-    "el-tree-select": "beijing",
-  });
-}
 
 watch(
   () => rawFormValue,

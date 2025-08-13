@@ -4,26 +4,26 @@
 
 ## 示例代码
 
-### index.vue
-```vue
+::: code-group
+
+```vue [index.vue]
 <template>
   <h3>表单列表</h3>
   <FastForm>
     <template #points2="{ formValue, nestedKey }">
-      <el-input
-        placeholder="请输入"
-        v-model="formValue[nestedKey.prop][nestedKey.key].points2"
-      />
+      <el-input placeholder="请输入" v-model="formValue[nestedKey.prop][nestedKey.key].points2" />
     </template>
   </FastForm>
 
   <el-space>
-    <el-button @click="add" type="primary">添加1个</el-button>
+    <el-button @click="add" type="primary">添加1个相同表单</el-button>
+    <el-button @click="customeAdd" type="primary">添加1个不同表单</el-button>
     <el-button @click="remove" type="primary">删除第2个</el-button>
     <el-button @click="submit" type="primary">提交</el-button>
     <el-button @click="reset">重置</el-button>
     <el-button @click="setFormDisabled(false)">启用表单</el-button>
     <el-button @click="setFormDisabled(true)">禁用表单</el-button>
+    <el-button @click="setFormVal">赋值</el-button>
   </el-space>
 </template>
 
@@ -32,7 +32,7 @@ import { useForm } from "element-plus-fast-form";
 import { formConfig, attrs } from "./config";
 import { ElMessage } from "element-plus";
 
-const { FastForm, formValue, formRef, addItem, removeItem, setFormDisabled } = useForm({
+const { FastForm, formValue, formRef, addItem, removeItem, setFormDisabled, setFormValue } = useForm({
   ...attrs,
   formConfig,
 });
@@ -56,15 +56,46 @@ const reset = () => {
 const add = () => {
   addItem("children");
 };
+const customeAdd = () => {
+  addItem("children",
+    [
+      {
+        component: "el-input",
+        formItemProps: {
+          prop: "input2",
+          label: "输入框",
+          rules: [
+            {
+              required: true,
+              message: "请输入",
+            },
+          ],
+        },
+        componentProps: {
+          placeholder: "请输入",
+        },
+      }
+
+    ]);
+};
 const remove = () => {
   removeItem("children", 1);
+};
+
+const setFormVal = () => {
+  setFormValue({
+    "children": [
+      {
+        'el-input': '2', 'el-radio-group': null, points2: '3'
+      }
+    ]
+  });
 };
 </script>
 
 ```
 
-### config.ts
-```ts
+```ts [config.ts]
 import { defineAsyncComponent } from "vue";
 
 // 新增表单样式配置
@@ -79,7 +110,18 @@ export const attrs = {
     "label-position": "right",
     "label-suffix": "：",
     "label-width": "160",
+    model: {
+      "el-input": "123",
+      children: [
+        {
+          "el-input": "123",
+          "el-radio-group": "Y",
+          "points2": "123",
+        },
+      ],
+    },
   },
+  showOperate: true,
 };
 
 // 新增表单配置
@@ -100,8 +142,8 @@ export const formConfig = [
             value: string,
             callback: (arg0?: Error | undefined) => void
           ) => {
-            if (/\w/.test(value)) {
-              return callback(new Error("请输入非字母数字下划线字符"));
+            if (!/^\d+$/.test(value)) {
+              return callback(new Error("请输入数字"));
             }
             callback();
           },
@@ -188,7 +230,7 @@ export const formConfig = [
             span: 24,
           },
           component: defineAsyncComponent<any>(
-            () => import("@/components/Avatar-upload/index.vue")
+            () => import("../../components/Avatar-upload/index.vue")
           ),
           formItemProps: {
             prop: "avatar",
@@ -202,4 +244,122 @@ export const formConfig = [
 ];
 
 ```
+
+```vue [components/Avatar-upload/index.vue]
+<template>
+  <el-upload
+    class="avatar-uploader"
+    action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+    :show-file-list="false"
+    :on-success="handleAvatarSuccess"
+    :before-upload="beforeAvatarUpload"
+  >
+    <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+    <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+  </el-upload>
+</template>
+
+<script lang="ts" setup>
+import { ref, defineProps, watch, defineEmits } from "vue";
+import { ElMessage } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
+
+import type { UploadProps } from "element-plus";
+const imageUrl = ref("");
+
+const props = defineProps({
+  formValue: { // 表单数据
+    type: Object,
+  },
+  modelValue: { // 当前组件数据
+    type: String,
+    default: "",
+  },
+  prop: {
+    type: String,
+  },
+});
+
+watch(
+  () => props.modelValue,
+  () => {
+    // 重置表单时，赋值
+    imageUrl.value = props.modelValue
+  }
+);
+
+const emits = defineEmits(["update:modelValue"]);
+
+const getImageInfo = (file: any): Promise<string> => {
+  let fileReader = new FileReader();
+  fileReader.readAsDataURL(file);
+  return new Promise((resolve) => {
+    fileReader.onload = function (e) {
+      let base64 = this.result;
+      resolve(base64 as string);
+    };
+  });
+};
+
+
+const handleAvatarSuccess: UploadProps["onSuccess"] = (
+  response,
+  uploadFile
+) => {
+  imageUrl.value = URL.createObjectURL(uploadFile.raw!);
+};
+
+const beforeAvatarUpload: UploadProps["beforeUpload"] = async (rawFile) => {
+  if (!["image/jpeg", "image/jpg", "image/png"].includes(rawFile.type)) {
+    ElMessage.error("请传图片");
+    return false;
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    ElMessage.error("Avatar picture size can not exceed 2MB!");
+    return false;
+  }
+
+  // mock start
+  const filedata: string = await getImageInfo(rawFile);
+  imageUrl.value = filedata;
+  emits("update:modelValue", filedata);
+  // mock end
+
+  return true;
+};
+</script>
+
+<style scoped>
+.avatar-uploader .avatar {
+  width: 80px;
+  height: 80px;
+  display: block;
+}
+</style>
+
+<style>
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 80px;
+  height: 80px;
+  text-align: center;
+}
+</style>
+
+```
+
+:::
 

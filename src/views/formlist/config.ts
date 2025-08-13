@@ -12,7 +12,18 @@ export const attrs = {
     "label-position": "right",
     "label-suffix": "：",
     "label-width": "160",
+    model: {
+      "el-input": "123",
+      children: [
+        {
+          "el-input": "123",
+          "el-radio-group": "Y",
+          "points2": "123",
+        },
+      ],
+    },
   },
+  showOperate: true,
 };
 
 // 新增表单配置
@@ -33,8 +44,8 @@ export const formConfig = [
             value: string,
             callback: (arg0?: Error | undefined) => void
           ) => {
-            if (/\w/.test(value)) {
-              return callback(new Error("请输入非字母数字下划线字符"));
+            if (!/^\d+$/.test(value)) {
+              return callback(new Error("请输入数字"));
             }
             callback();
           },
@@ -121,7 +132,7 @@ export const formConfig = [
             span: 24,
           },
           component: defineAsyncComponent<any>(
-            () => import("@/components/Avatar-upload/index.vue")
+            () => import("../../components/Avatar-upload/index.vue")
           ),
           formItemProps: {
             prop: "avatar",

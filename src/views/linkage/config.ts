@@ -1,5 +1,3 @@
-import { defineAsyncComponent } from "vue";
-
 // 新增表单样式配置
 export const attrs = {
   colProps: {
@@ -18,7 +16,7 @@ export const attrs = {
 export const formConfigA = [
   {
     colProps: {
-      soan: 12,
+      span: 12,
     },
     component: "el-select",
     defaultValue: "pork",
@@ -37,7 +35,7 @@ export const formConfigA = [
 
   {
     colProps: {
-      soan: 12,
+      span: 12,
     },
     // defaultValue: "water",
     component: "el-radio-group",
@@ -56,7 +54,7 @@ export const formConfigA = [
 
   {
     colProps: {
-      soan: 12,
+      span: 12,
     },
     component: "el-select",
     formItemProps: {
@@ -69,58 +67,6 @@ export const formConfigA = [
         { label: "纸包", value: "paper" },
         { label: "盒装", value: "box" },
       ],
-    },
-  },
-];
-
-export const formConfigB = [
-  {
-    component: defineAsyncComponent<any>(
-      () => import("./components/Select/index.vue")
-    ),
-    formItemProps: {
-      prop: "food",
-      label: "食材",
-    },
-    defaultValue: "pork",
-  },
-  {
-    colProps: {
-      span: 6,
-    },
-    component: defineAsyncComponent<any>(
-      () => import("./components/Radio/index.vue")
-    ),
-    formItemProps: {
-      prop: "type",
-      label: "烹饪方式",
-    },
-    defaultValue: "water",
-  },
-];
-
-export const formConfigC = [
-  {
-    colProps: {
-      soan: 12,
-    },
-    component: "slot",
-    defaultValue: "pork",
-    formItemProps: {
-      prop: "food",
-      label: "食材",
-    },
-  },
-
-  {
-    colProps: {
-      soan: 12,
-    },
-    defaultValue: "water",
-    component: "slot",
-    formItemProps: {
-      prop: "type",
-      label: "烹饪方式",
     },
   },
 ];

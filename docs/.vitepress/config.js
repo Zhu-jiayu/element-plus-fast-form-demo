@@ -60,11 +60,17 @@ export default defineConfig({
       //   { text: '首页', link: '/useForm' },
     ],
     sidebar: [
-      { text: "文档", items: [{ text: "使用说明", link: "/" }] },
+      {
+        text: "文档",
+        items: [
+          { text: "API文档 ", link: "/" },
+        ],
+      },
       {
         text: "方法示例",
         items: [
           { text: "基础用法", link: "/useForm" },
+          { text: "表单默认值", link: "/defaultValue" },
           { text: "slot插槽", link: "/slot" },
           { text: "自定义组件", link: "/custom" },
           { text: "文本组件", link: "/string" },
@@ -73,7 +79,9 @@ export default defineConfig({
           { text: "多表单实例", link: "/multipleForm" },
           { text: "动态组件属性", link: "/dynamicOptions" },
           { text: "表单项增删改", link: "/setFormConfig" },
-          { text: "表单项联动", link: "/linkage" },
+          { text: "表单项联动(hooks方法)", link: "/linkage" },
+          { text: "表单项联动(自定义组件)", link: "/linkage2" },
+          { text: "表单项联动(slot)", link: "/linkage3" },
         ],
       },
     ],

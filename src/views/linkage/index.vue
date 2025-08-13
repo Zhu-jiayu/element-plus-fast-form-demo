@@ -1,61 +1,17 @@
 <template>
-  <h3>表单项联动示例</h3>
-  <el-divider>hooks方法-表单项联动</el-divider>
+  <h3>表单项联动示例(hooks方法)</h3>
   <FastForm />
   <el-space>
     <el-button @click="submit" type="primary">提交</el-button>
     <el-button @click="reset">重置</el-button>
   </el-space>
 
-  <el-divider>自定义组件-表单项联动</el-divider>
-  <FastFormB />
-  <el-space>
-    <el-button @click="submitB" type="primary">提交</el-button>
-    <el-button @click="resetB">重置</el-button>
-  </el-space>
-
-  <el-divider>slot-表单项联动</el-divider>
-  <FastFormC>
-    <template #food="{ modelValue }">
-      <el-select
-        :model-value="modelValue"
-        placeholder="请选择"
-        @change="handleSelectChange"
-      >
-        <el-option
-          v-for="item in foodOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-    </template>
-
-    <template #type="{ modelValue }">
-      <el-radio-group
-        :model-value="modelValue"
-        placeholder="请选择"
-        @change="handleRadioChange"
-      >
-        <el-radio
-          v-for="item in typeOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-radio-group>
-    </template>
-  </FastFormC>
-  <el-space>
-    <el-button @click="submitC" type="primary">提交</el-button>
-    <el-button @click="resetC">重置</el-button>
-  </el-space>
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "element-plus-fast-form"; 
+import { useForm } from "element-plus-fast-form";
 
-import { formConfigA, attrs, formConfigB, formConfigC } from "./config";
+import { formConfigA, attrs, } from "./config";
 import { ElMessage } from "element-plus";
 import { watch, ref } from "vue";
 
@@ -145,88 +101,4 @@ watch(
     deep: true,
   }
 );
-
-// 自定义组件-表单项联动
-const {
-  FastForm: FastFormB,
-  rawFormValue: rawFormValueB,
-  formRef: formRefB,
-} = useForm({
-  ...attrs,
-  formConfig: formConfigB,
-});
-
-const submitB = () => {
-  if (formRefB.value) {
-    formRefB.value.validate((valid: boolean) => {
-      if (valid) {
-        ElMessage.warning("查看控制台");
-        console.log({ rawFormValueB });
-      }
-    });
-  }
-};
-const resetB = () => {
-  if (formRefB.value) {
-    formRefB.value.resetFields();
-  }
-};
-
-// slot-表单项联动
-
-const foodOptions = ref([
-  { label: "猪肉", value: "pork" },
-  { label: "牛肉", value: "beef" },
-]);
-const typeOptions = ref([
-  { label: "bbq", value: "bbq" },
-  { label: "水煮", value: "water" },
-]);
-const {
-  FastForm: FastFormC,
-  rawFormValue: rawFormValueC,
-  formRef: formRefC,
-  setFormValue: setFormValueC,
-} = useForm({
-  ...attrs,
-  formConfig: formConfigC,
-});
-
-const submitC = () => {
-  if (formRefC.value) {
-    formRefC.value.validate((valid: boolean) => {
-      if (valid) {
-        ElMessage.warning("查看控制台");
-        console.log({ rawFormValueC });
-      }
-    });
-  }
-};
-const resetC = () => {
-  if (formRefC.value) {
-    formRefC.value.resetFields();
-  }
-};
-
-function handleSelectChange(value: string) {
-  setFormValueC({
-    food: value,
-  });
-
-  if (value === "beef") {
-    setFormValueC({
-      type: "bbq",
-    });
-  } else {
-    setFormValueC({
-      type: "water",
-    });
-  }
-}
-
-function handleRadioChange(value: string) {
-  setFormValueC({
-    type: value,
-  });
-}
 </script>

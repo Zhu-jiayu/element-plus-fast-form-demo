@@ -8,10 +8,9 @@
 - [功能特性](#功能特性)
 - [预览](#预览)
 - [安装与引入](#安装与引入)
+- [API](#api)
 - [类型定义（types）](#类型定义)
-- [核心 Hooks](#核心-hooks)
-
-
+- [组件透传属性](#组件透传属性)
 
 ## 功能特性
 
@@ -99,6 +98,75 @@ import ElementPlusFastForm from "element-plus-fast-form";
 app.use(ElementPlusFastForm);
 ```
 
+## API
+
+### hooks: useForm
+
+**定义：**
+
+```ts
+function useForm(config: IFormProps): IUseForm
+```
+
+
+| 方法名                | 入参类型                                   | 出参类型         | 说明                       |
+|-----------------------|--------------------------------------------|------------------|----------------------------|
+| useForm               | IFormProps \| Reactive\<IFormProps\> \| Ref\<IFormProps\>                                | IUseForm         | 获取表单实例和所有操作方法 |
+
+注意点：入参类型如果是响应式数据，只作用于表单初始化时的异步渲染，如果需要修改表单属性，请使用setFormConfig 或 setComponentProps方法。
+
+
+### useForm 返回属性
+
+| 属性名         | 类型                    | 说明                                 |
+|----------------|------------------------|--------------------------------------|
+| FastForm       | DefineComponent        | 表单组件，直接用于模板渲染           |
+| formValue      | FormValueType          | 响应式表单数据对象                   |
+| rawFormValue   | FormValueType          | 原始表单数据对象（非响应式）|
+| formRef        | Ref<FormInstance \| undefined> | el-form 实例引用             |
+
+
+### useForm 返回方法
+
+| 方法名             | 入参类型                                         | 返回类型 | 作用说明                                 |
+|--------------------|--------------------------------------------------|----------|------------------------------------------|
+| addItem            | prop: string, config?: IFormconfig[]            | void     | 添加嵌套表单（config不传则添加相同的表单）        |
+| removeItem         | prop: string, key: number                        | void     | 删除嵌套表单（如数组表单 remove）      |
+| setComponentProps  | prop: string, componentProps: Record<string, any> | void     | 动态设置表单项组件属性                   |
+| setFormValue       | formData: Record<string, any>                    | void     | 动态设置表单数据                         |
+| setFormConfig      | prop: string, config: Partial<IFormconfig>       | void     | 动态设置表单项配置                       |
+| setFormConfigs     | newFormConfig: IFormconfig[]                     | void     | 批量替换整个表单配置                     |
+| addFormConfig      | config: IFormconfig, index?: number              | void     | 动态添加表单项                           |
+| removeFormConfig   | props: string[]                                  | void     | 动态删除表单项                           |
+| setFormDisabled    | disabled: boolean                                | void     | 禁用/启用整个表单                        |
+
+
+
+
+- `removeItem(prop: string, key: number)`  
+  删除指定嵌套表单的第 key 项。
+
+- `setComponentProps(prop, componentProps)`  
+  动态修改某个表单项的组件属性（如 options、placeholder、disabled 等）。
+
+- `setFormValue(formData)`  
+  批量设置表单数据，常用于一键填充或重置。
+
+- `setFormConfig(prop, config)`  
+  动态修改某个表单项的配置（如校验规则、label、组件类型等）。
+
+- `setFormConfigs(newFormConfig)`  
+  **批量替换整个表单配置**，用于异步加载配置或动态切换表单结构。会清空原有配置和表单值，重新初始化。
+
+- `addFormConfig(config, index?)`  
+  动态添加表单项，可指定插入位置。
+
+- `removeFormConfig(props)`  
+  批量删除表单项，参数为 prop 数组。
+
+- `setFormDisabled(disabled)`  
+  禁用或启用整个表单。
+
 
 ## 类型定义
 
@@ -145,14 +213,15 @@ export interface IFormconfig {
   }>;
   /** el-form-item 组件属性（参考element-plus el-form-item 属性） */
   formItemProps: Partial<{
-    prop: string;             // 字段名（必填，唯一）
+    prop: string;             // 字段名
     label: string;            // 标签
-    rules?: Array<FormItemRule>; // 校验规则
-    [key: string]: any;
+    rules: Array<FormItemRule>; // 校验规则
+    model: FormValueType; // 表单默认值
+    [key: string]: any;  // 其他属性，参考element-plus el-form-item 属性）
   }>;
   /** 嵌套子表单项（二维数组，用于嵌套表单） */
   children?: Array<Array<IFormconfig>>;
-  /** 默认值 */
+  /** 默认值，优先级高于formItemProps.model */
   defaultValue?: any;
   /** 后缀文字（如单位：%、元等） */
   suffix?: string;
@@ -174,6 +243,8 @@ export interface IFormProps<T = IFormconfig> {
   colProps?: Record<string, any>;
   /** el-form 组件属性 */
   formProps?: Record<string, any>;
+  /** 是否显示嵌套表单操作按钮 */
+  showOperate?: boolean;
 }
 ```
 
@@ -211,12 +282,12 @@ export interface IUseForm {
   FastForm: DefineComponent;
   /** 响应式表单数据对象 */
   formValue: FormValueType;
-  /** 原始表单数据对象（非响应式，适合 watch） */
+  /** 原始表单数据对象（非响应式） */
   rawFormValue: FormValueType;
   /** el-form 实例引用 */
   formRef: Ref<FormInstance | undefined>;
   /** 添加嵌套表单项（如数组表单 push） */
-  addItem: (prop: string) => void;
+  addItem: (prop: string, config?: IFormconfig[]) => void;
   /** 删除嵌套表单项（如数组表单 remove） */
   removeItem: (prop: string, key: number) => void;
   /** 动态设置表单项组件属性 */
@@ -237,74 +308,231 @@ export interface IUseForm {
 ```
 
 
-## 核心 Hooks
+## 组件透传属性
 
-### useForm
+根据配置中的 `component` 类型，表单会自动透传不同的属性和方法给对应的组件：
 
-**定义：**
+### 1. Slot 组件（component: 'slot'）
+
+当组件类型为 `'slot'` 时，会调用对应的插槽函数并透传以下属性：
 
 ```ts
-function useForm(config: IFormProps): IUseForm
+// 插槽函数接收的参数类型
+interface SlotProps {
+  /** 整个表单的数据对象 */
+  formValue: FormValueType;
+  /** 当前字段的值 */
+  modelValue?: any;
+  /** 嵌套数据的键信息（仅在嵌套表单中存在） */
+  nestedKey?: INestedDataProps;
+}
 ```
 
+**使用示例：**
+```vue
+<template>
+  <FastForm>
+    <template #fieldName="{ formValue, modelValue }">
+      <div>当前值: {{ modelValue }}</div>
+      <div>整个表单: {{ formValue }}</div>
+    </template>
+  </FastForm>
+</template>
+```
 
-| 方法名                | 入参类型                                   | 出参类型         | 说明                       |
-|-----------------------|--------------------------------------------|------------------|----------------------------|
-| useForm               | IFormProps \| Reactive\<IFormProps\> \| Ref\<IFormProps\>                                | IUseForm         | 获取表单实例和所有操作方法 |
+### 2. 自定义 Vue 组件
 
-注意点：入参类型如果是响应式数据，只作用于表单初始化时的异步渲染，如果需要修改表单属性，请使用setFormConfig 或 setComponentProps方法。
+当组件类型为自定义 Vue 组件时，会透传以下属性和方法：
 
+```ts
+// 自定义组件接收的 props 类型
+interface CustomComponentProps {
+  /** 整个表单的数据对象 */
+  formValue: FormValueType;
+  /** 当前字段的属性名 */
+  prop?: string;
+  /** 当前字段的值 */
+  modelValue?: any;
+  /** 值更新回调函数 */
+  'onUpdate:modelValue'?: (value: any) => void;
+  /** 配置中的所有组件属性 */
+  [key: string]: any; // 来自 itemConfig.componentProps
+  
+  // Form 类的所有公共方法：
+  /** 添加嵌套表单项 */
+  addItem: (prop: string, config?: IFormconfig[]) => void;
+  /** 删除嵌套表单项 */
+  removeItem: (prop: string, key: number) => void;
+  /** 动态设置表单项组件属性 */
+  setComponentProps: (prop: string, componentProps: Record<string, any>) => void;
+  /** 动态设置表单数据 */
+  setFormValue: (formData: Record<string, any>) => void;
+  /** 动态设置表单项配置 */
+  setFormConfig: (prop: string, config: Partial<IFormconfig>) => void;
+  /** 批量替换整个表单配置 */
+  setFormConfigs: (newFormConfig: IFormconfig[]) => void;
+  /** 动态添加表单项 */
+  addFormConfig: (config: IFormconfig, index?: number) => void;
+  /** 动态删除表单项 */
+  removeFormConfig: (props: string[]) => void;
+  /** 禁用/启用整个表单 */
+  setFormDisabled: (disabled: boolean) => void;
+}
+```
 
-### useForm 返回属性
+**使用示例：**
+```vue
+<!-- 自定义头像上传组件 Avatar-upload/index.vue -->
+<template>
+  <el-upload
+    class="avatar-uploader"
+    action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+    :show-file-list="false"
+    :on-success="handleAvatarSuccess"
+    :before-upload="beforeAvatarUpload"
+  >
+    <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+    <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+  </el-upload>
+</template>
 
-| 属性名         | 类型                    | 说明                                 |
-|----------------|------------------------|--------------------------------------|
-| FastForm       | DefineComponent        | 表单组件，直接用于模板渲染           |
-| formValue      | FormValueType          | 响应式表单数据对象                   |
-| rawFormValue   | FormValueType          | 原始表单数据对象（非响应式，适合 watch）|
-| formRef        | Ref<FormInstance \| undefined> | el-form 实例引用             |
+<script lang="ts" setup>
+import { ref, defineProps, watch, defineEmits } from "vue";
+import { ElMessage } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
 
+const imageUrl = ref("");
 
-### useForm 返回方法
+// 接收透传的属性
+const props = defineProps({
+  formValue: { // 整个表单数据对象
+    type: Object,
+  },
+  modelValue: { // 当前字段的值
+    type: String,
+    default: "",
+  },
+  prop: { // 当前字段的属性名
+    type: String,
+  },
+  // 还可以接收 Form 类的所有公共方法，如 addItem, removeItem, setComponentProps, setFormValue 等
+});
 
-| 方法名             | 入参类型                                         | 返回类型 | 作用说明                                 |
-|--------------------|--------------------------------------------------|----------|------------------------------------------|
-| addItem            | prop: string                                     | void     | 添加嵌套表单项（如数组表单 push）        |
-| removeItem         | prop: string, key: number                        | void     | 删除嵌套表单项（如数组表单 remove）      |
-| setComponentProps  | prop: string, componentProps: Record<string, any> | void     | 动态设置表单项组件属性                   |
-| setFormValue       | formData: Record<string, any>                    | void     | 动态设置表单数据                         |
-| setFormConfig      | prop: string, config: Partial<IFormconfig>       | void     | 动态设置表单项配置                       |
-| setFormConfigs     | newFormConfig: IFormconfig[]                     | void     | 批量替换整个表单配置                     |
-| addFormConfig      | config: IFormconfig, index?: number              | void     | 动态添加表单项                           |
-| removeFormConfig   | props: string[]                                  | void     | 动态删除表单项                           |
-| setFormDisabled    | disabled: boolean                                | void     | 禁用/启用整个表单                        |
+// 监听 modelValue 变化，处理表单重置等场景
+watch(
+  () => props.modelValue,
+  () => {
+    imageUrl.value = props.modelValue
+  }
+);
 
+// 定义事件，实现双向绑定
+const emits = defineEmits(["update:modelValue"]);
 
-**方法说明举例：**
+const handleAvatarSuccess = (response, uploadFile) => {
+  imageUrl.value = URL.createObjectURL(uploadFile.raw!);
+};
 
-- `addItem(prop: string)`  
-  向指定嵌套表单（如数组表单）添加一项。
+const beforeAvatarUpload = async (rawFile) => {
+  if (!["image/jpeg", "image/jpg", "image/png"].includes(rawFile.type)) {
+    ElMessage.error("请传图片");
+    return false;
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    ElMessage.error("图片大小不能超过 2MB!");
+    return false;
+  }
 
-- `removeItem(prop: string, key: number)`  
-  删除指定嵌套表单的第 key 项。
+  // 处理文件并更新表单值
+  const filedata = await getImageInfo(rawFile);
+  imageUrl.value = filedata;
+  emits("update:modelValue", filedata); // 通知表单更新值
+  
+  return true;
+};
 
-- `setComponentProps(prop, componentProps)`  
-  动态修改某个表单项的组件属性（如 options、placeholder、disabled 等）。
+const getImageInfo = (file: any): Promise<string> => {
+  let fileReader = new FileReader();
+  fileReader.readAsDataURL(file);
+  return new Promise((resolve) => {
+    fileReader.onload = function (e) {
+      resolve(this.result as string);
+    };
+  });
+};
+</script>
+```
 
-- `setFormValue(formData)`  
-  批量设置表单数据，常用于一键填充或重置。
+**在表单配置中使用：**
+```ts
+import AvatarUpload from '@/components/Avatar-upload/index.vue';
 
-- `setFormConfig(prop, config)`  
-  动态修改某个表单项的配置（如校验规则、label、组件类型等）。
+const formConfig: IFormconfig[] = [
+  {
+    component: AvatarUpload, // 使用自定义组件
+    formItemProps: {
+      prop: 'avatar',
+      label: '头像上传'
+    },
+    // componentProps 中的属性也会透传给组件
+    componentProps: {
+      // 可以传递其他自定义属性
+    }
+  }
+];
+```
 
-- `setFormConfigs(newFormConfig)`  
-  **批量替换整个表单配置**，用于异步加载配置或动态切换表单结构。会清空原有配置和表单值，重新初始化。
+### 3. String 组件（HTML 标签字符串）
 
-- `addFormConfig(config, index?)`  
-  动态添加表单项，可指定插入位置。
+当组件类型为字符串（如 `'div'`、`'span'` 等）时，会透传：
 
-- `removeFormConfig(props)`  
-  批量删除表单项，参数为 prop 数组。
+```ts
+// String 组件接收的属性
+interface StringComponentProps {
+  /** 配置中的所有组件属性 */
+  [key: string]: any; // 来自 itemConfig.componentProps
+}
+// 子元素内容为 itemConfig.defaultValue 或 null
+```
 
-- `setFormDisabled(disabled)`  
-  禁用或启用整个表单。
+**使用示例：**
+```ts
+const config: IFormconfig = {
+  component: 'div',
+  componentProps: {
+    class: 'custom-text',
+    style: { color: 'red' }
+  },
+  defaultValue: '这是一个文本内容',
+  formItemProps: {
+    prop: 'textField',
+    label: '文本标签'
+  }
+};
+```
+
+### 4. Element Plus 组件（el- 前缀）
+
+当组件类型为 Element Plus 组件（如 `'el-input'`、`'el-select'` 等）时，会自动透传：
+
+```ts
+// Element Plus 组件接收的属性
+interface ElementComponentProps {
+  /** 当前字段的值 */
+  modelValue?: any;
+  /** 值更新回调函数 */
+  'onUpdate:modelValue': (value: any) => void;
+  /** 配置中的所有组件属性 */
+  [key: string]: any; // 来自 itemConfig.componentProps
+  /** 自动设置的样式 */
+  style: {
+    width: string; // 默认为 '100%' 或来自 componentProps.style.width
+  };
+}
+```
+
+**注意事项：**
+- 所有透传的属性都来自于 `itemConfig.componentProps` 配置
+- 自定义组件会额外获得 Form 类的所有公共方法
+- 透传的方法包括表单操作方法（如 `addItem`、`removeItem`）和动态配置方法（如 `setComponentProps`、`setFormValue` 等）
+- 嵌套表单中的组件会额外获得 `nestedKey` 参数
+- 组件的双向绑定通过 `modelValue` 和 `onUpdate:modelValue` 实现

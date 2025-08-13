@@ -8,6 +8,14 @@ export const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "useForm" */ "../views/useForm/index.vue"),
   },
   {
+    path: "/defaultValue",
+    name: "表单默认值",
+    component: () =>
+      import(
+        /* webpackChunkName: "defaultValue" */ "../views/defaultValue/index.vue"
+      ),
+  },
+  {
     path: "/slot",
     name: "slot插槽",
     component: () =>
@@ -64,9 +72,21 @@ export const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/linkage",
-    name: "表单项联动",
+    name: "表单项联动(hooks方法)",
     component: () =>
       import(/* webpackChunkName: "linkage" */ "../views/linkage/index.vue"),
+  },
+  {
+    path: "/linkage2",
+    name: "表单项联动(自定义组件)",
+    component: () =>
+      import(/* webpackChunkName: "linkage2" */ "../views/linkage2/index.vue"),
+  },
+  {
+    path: "/linkage3",
+    name: "表单项联动(slot)",
+    component: () =>
+      import(/* webpackChunkName: "linkage3" */ "../views/linkage3/index.vue"),
   },
 ];
 

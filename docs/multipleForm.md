@@ -4,8 +4,9 @@
 
 ## 示例代码
 
-### index.vue
-```vue
+::: code-group
+
+```vue [index.vue]
 <template>
   <h3>多表单示例</h3>
 
@@ -103,8 +104,7 @@ watch(
 
 ```
 
-### configA.ts
-```ts
+```ts [configA.ts]
 // 新增表单样式配置
 export const attrs = {
   colProps: {
@@ -159,8 +159,7 @@ export const formConfig = [
 
 ```
 
-### configB.ts
-```ts
+```ts [configB.ts]
 // 新增表单样式配置
 export const attrs = {
   colProps: {
@@ -215,4 +214,6 @@ export const formConfig = [
 ];
 
 ```
+
+:::
 
