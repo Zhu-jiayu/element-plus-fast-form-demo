@@ -23,7 +23,7 @@ export const formConfig = [
     defaultValue: "male",
     formItemProps: {
       prop: "el-select",
-      label: "el-select",
+      label: "性别",
     },
     componentProps: {
       placeholder: "去选择",
@@ -38,13 +38,14 @@ export const formConfig = [
     component: "el-radio-group",
     formItemProps: {
       prop: "el-radio-group",
-      label: "el-radio-group",
+      label: "工作年限",
     },
     componentProps: {
       placeholder: "去选择",
       options: [
-        { label: "1", value: "Y" },
-        { label: "2", value: "N" },
+        { label: "1-3年", value: "junior" },
+        { label: "3-5年", value: "middle" },
+        { label: "5年以上", value: "senior" },
       ],
     },
   },

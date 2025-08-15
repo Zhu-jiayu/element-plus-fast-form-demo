@@ -23,7 +23,7 @@ export const formConfig = [
     defaultValue: "male",
     formItemProps: {
       prop: "el-select",
-      label: "el-select",
+      label: "喜欢的水果",
     },
     componentProps: {
       placeholder: "去选择",
@@ -35,11 +35,10 @@ export const formConfig = [
   },
 
   {
-
     component: "el-radio-group",
     formItemProps: {
       prop: "el-radio-group",
-      label: "el-radio-group",
+      label: "是否素食主义者",
     },
     componentProps: {
       placeholder: "去选择",

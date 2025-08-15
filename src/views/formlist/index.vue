@@ -1,8 +1,8 @@
 <template>
   <h3>表单列表</h3>
   <FastForm>
-    <template #points2="{ formValue, nestedKey }">
-      <el-input placeholder="请输入" v-model="formValue[nestedKey.prop][nestedKey.key].points2" />
+    <template #points2="{ formValue, nestedKey, nestedProp, modelValue }">
+      <el-input placeholder="请输入" v-model="formValue[nestedProp][nestedKey].points2" />
     </template>
   </FastForm>
 

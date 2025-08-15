@@ -70,10 +70,14 @@ watch(
 ```
 
 ```ts [config.ts]
-const initials = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+const cities = [
+  "北京", "上海", "广州", "深圳", "杭州", "南京", "苏州", "成都", "重庆", "武汉",
+  "西安", "青岛", "大连", "宁波", "厦门", "福州", "济南", "郑州", "长沙", "合肥",
+  "沈阳", "哈尔滨", "长春", "石家庄", "太原", "呼和浩特", "兰州", "银川", "西宁", "乌鲁木齐"
+];
 const moreOptions = Array.from({ length: 10000 }).map((_, idx) => ({
-  value: `Option ${idx + 1}`,
-  label: `${initials[idx % 10]}${idx}`,
+  value: `${cities[idx % cities.length]}-${Math.floor(idx / cities.length) + 1}`,
+  label: `${cities[idx % cities.length]}${Math.floor(idx / cities.length) > 0 ? `-${Math.floor(idx / cities.length) + 1}区` : ''}`,
 }));
 
 // 新增表单样式配置
@@ -89,16 +93,16 @@ export const attrs = {
     "label-suffix": "：",
     "label-width": "160",
     model: {
-      "el-input": "123",
-      "el-select": "A",
-      "el-select2": "Option 1",
-      "el-cascader": ["艺术", "1-1"],
-      "el-select-multiple": ["A", "B"],
-      "el-radio-group": "Y",
-      "el-checkbox-group": ["1", "2"],
-      "el-input-number": 10,
-      "el-date-picker": "2021-01-01",
-      "el-time-picker": "12:00:00",
+      "el-input": "85",
+      "el-select": "tech",
+      "el-select2": "北京-1",
+      "el-cascader": ["guangdong", "shenzhen"],
+      "el-select-multiple": ["javascript", "vue"],
+      "el-radio-group": "male",
+      "el-checkbox-group": ["reading", "sports"],
+      "el-input-number": 28,
+      "el-date-picker": "2023-03-15",
+      "el-time-picker": "09:00:00",
       "el-tree-select": "beijing",
     },
   },
@@ -110,32 +114,35 @@ export const formConfig = [
     component: "el-input",
     formItemProps: {
       prop: "el-input",
-      label: "el-input",
+      label: "绩效评分",
       rules: [
         {
           required: true,
-          message: "请填写完整",
+          message: "请填写绩效评分",
         },
       ],
     },
     componentProps: {
-      placeholder: "去输入",
+      placeholder: "请输入0-100分",
     },
     suffix: "%",
-    defaultValue: "100",
+    defaultValue: "95",
   },
 
   {
     component: "el-select",
     formItemProps: {
       prop: "el-select",
-      label: "el-select",
+      label: "所属部门",
     },
     componentProps: {
-      placeholder: "去选择",
+      placeholder: "请选择部门",
       options: [
-        { label: "A", value: "A" },
-        { label: "B", value: "B" },
+        { label: "技术部", value: "tech" },
+        { label: "产品部", value: "product" },
+        { label: "运营部", value: "operation" },
+        { label: "市场部", value: "marketing" },
+        { label: "人事部", value: "hr" },
       ],
       filterable: true,
     },
@@ -144,10 +151,10 @@ export const formConfig = [
     component: "el-select-v2",
     formItemProps: {
       prop: "el-select2",
-      label: "虚拟化下拉",
+      label: "工作城市",
     },
     componentProps: {
-      placeholder: "去选择",
+      placeholder: "请选择工作城市",
       options: moreOptions,
       filterable: true,
     },
@@ -156,36 +163,58 @@ export const formConfig = [
     component: "el-cascader",
     formItemProps: {
       prop: "el-cascader",
-      label: "el-cascader",
+      label: "户籍地址",
     },
     componentProps: {
-      placeholder: "去选择",
+      placeholder: "请选择省市",
       options: [
         {
-          label: "艺术",
-          value: "艺术",
+          label: "广东省",
+          value: "guangdong",
           children: [
             {
-              label: "音乐",
-              value: "1-1",
+              label: "深圳市",
+              value: "shenzhen",
             },
             {
-              label: "绘画",
-              value: "1-2",
+              label: "广州市",
+              value: "guangzhou",
+            },
+            {
+              label: "珠海市",
+              value: "zhuhai",
             },
           ],
         },
         {
-          label: "体育",
-          value: "2",
+          label: "浙江省",
+          value: "zhejiang",
           children: [
             {
-              label: "足球",
-              value: "2-1",
+              label: "杭州市",
+              value: "hangzhou",
             },
             {
-              label: "拳击",
-              value: "2-2",
+              label: "宁波市",
+              value: "ningbo",
+            },
+            {
+              label: "温州市",
+              value: "wenzhou",
+            },
+          ],
+        },
+        {
+          label: "江苏省",
+          value: "jiangsu",
+          children: [
+            {
+              label: "南京市",
+              value: "nanjing",
+            },
+            {
+              label: "苏州市",
+              value: "suzhou",
             },
           ],
         },
@@ -196,14 +225,20 @@ export const formConfig = [
     component: "el-select",
     formItemProps: {
       prop: "el-select-multiple",
-      label: "el-select-multiple",
+      label: "技能标签",
     },
     componentProps: {
-      placeholder: "去选择",
+      placeholder: "请选择技能",
       multiple: true,
       options: [
-        { label: "A", value: "A" },
-        { label: "B", value: "B" },
+        { label: "JavaScript", value: "javascript" },
+        { label: "TypeScript", value: "typescript" },
+        { label: "Vue.js", value: "vue" },
+        { label: "React", value: "react" },
+        { label: "Node.js", value: "nodejs" },
+        { label: "Python", value: "python" },
+        { label: "Java", value: "java" },
+        { label: "Go", value: "go" },
       ],
     },
   },
@@ -211,13 +246,13 @@ export const formConfig = [
     component: "el-radio-group",
     formItemProps: {
       prop: "el-radio-group",
-      label: "el-radio-group",
+      label: "性别",
     },
     componentProps: {
-      placeholder: "去选择",
+      placeholder: "请选择性别",
       options: [
-        { label: "是", value: "Y" },
-        { label: "否", value: "N" },
+        { label: "男", value: "male" },
+        { label: "女", value: "female" },
       ],
     },
   },
@@ -225,13 +260,17 @@ export const formConfig = [
     component: "el-checkbox-group",
     formItemProps: {
       prop: "el-checkbox-group",
-      label: "el-checkbox-group",
+      label: "兴趣爱好",
     },
     componentProps: {
-      placeholder: "去选择",
+      placeholder: "请选择兴趣爱好",
       options: [
-        { label: "1", value: "1" },
-        { label: "2", value: "2" },
+        { label: "阅读", value: "reading" },
+        { label: "运动", value: "sports" },
+        { label: "音乐", value: "music" },
+        { label: "旅行", value: "travel" },
+        { label: "摄影", value: "photography" },
+        { label: "游戏", value: "gaming" },
       ],
     },
   },
@@ -239,26 +278,26 @@ export const formConfig = [
     component: "el-input-number",
     formItemProps: {
       prop: "el-input-number",
-      label: "el-input-number",
+      label: "年龄",
     },
     componentProps: {
-      placeholder: "去输入",
-      min: 1,
-      max: 99,
+      placeholder: "请输入年龄",
+      min: 18,
+      max: 65,
       precision: 0,
       "controls-position": "right",
       style: { width: "100%" },
     },
-    suffix: "元",
+    suffix: "岁",
   },
   {
     component: "el-date-picker",
     formItemProps: {
       prop: "el-date-picker",
-      label: "el-date-picker",
+      label: "入职日期",
     },
     componentProps: {
-      placeholder: "去输入",
+      placeholder: "请选择入职日期",
       type: "date",
       "value-format": "YYYY-MM-DD",
     },
@@ -267,36 +306,50 @@ export const formConfig = [
     component: "el-tree-select",
     formItemProps: {
       prop: "el-tree-select",
-      label: "el-tree-select",
+      label: "办公地点",
     },
     componentProps: {
-      placeholder: "去选择",
+      placeholder: "请选择办公地点",
       data: [
         {
           value: "beijing",
-          label: "北京",
+          label: "北京总部",
           children: [
             {
               value: "chaoyang",
-              label: "朝阳",
+              label: "朝阳科技园",
             },
             {
-              value: "tongzhou",
-              label: "通州",
+              value: "haidian",
+              label: "海淀研发中心",
             },
           ],
         },
         {
-          value: "xiamen",
-          label: "厦门",
+          value: "shanghai",
+          label: "上海分公司",
           children: [
             {
-              value: "jimei",
-              label: "集美",
+              value: "pudong",
+              label: "浦东办公区",
             },
             {
-              value: "huli",
-              label: "湖里",
+              value: "huangpu",
+              label: "黄浦商务区",
+            },
+          ],
+        },
+        {
+          value: "shenzhen",
+          label: "深圳分公司",
+          children: [
+            {
+              value: "nanshan",
+              label: "南山科技园",
+            },
+            {
+              value: "futian",
+              label: "福田CBD",
             },
           ],
         },
@@ -307,10 +360,10 @@ export const formConfig = [
     component: "el-time-picker",
     formItemProps: {
       prop: "el-time-picker",
-      label: "el-time-picker",
+      label: "上班时间",
     },
     componentProps: {
-      placeholder: "去选择",
+      placeholder: "请选择上班时间",
       "value-format": "HH:mm:ss",
     },
   },

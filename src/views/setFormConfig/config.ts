@@ -1,4 +1,3 @@
-
 // 新增表单样式配置
 export const attrs = {
   colProps: {
@@ -218,5 +217,59 @@ export const formConfig = [
       placeholder: "去选择",
     },
   },
-  
+
+  {
+    formItemProps: {
+      prop: "children",
+      label: "children",
+    },
+    children: [
+      [
+        {
+          component: "span",
+          formItemProps: {},
+          componentProps: {
+            style: {
+              fontSize: "18px",
+              marginLeft: "-90px",
+            },
+          },
+          defaultValue: "标题",
+          colProps: {
+            span: 24,
+          },
+        },
+        {
+          component: "el-input",
+          formItemProps: {
+            prop: "el-input",
+            label: "el-input",
+            rules: [
+              {
+                required: true,
+                message: "请填写完整",
+              },
+            ],
+          },
+          componentProps: {
+            placeholder: "去输入",
+          },
+        },
+        {
+          component: "el-radio-group",
+          formItemProps: {
+            prop: "el-radio-group",
+            label: "el-radio-group",
+          },
+          componentProps: {
+            placeholder: "去选择",
+            options: [
+              { label: "是", value: "Y" },
+              { label: "否", value: "N" },
+            ],
+          },
+        },
+      ],
+    ],
+  },
 ];

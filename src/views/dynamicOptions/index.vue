@@ -5,14 +5,14 @@
   <el-space>
     <el-button @click="submit" type="primary">提交</el-button>
     <el-button @click="reset">重置</el-button>
-    <el-button @click="edit">设置options</el-button>
-    <el-button @click="disabled">设置第2个disabled</el-button>
-    <el-button @click="required">设置第3个必填</el-button>
+    <el-button @click="edit">修改options</el-button>
+    <el-button @click="disabled">设置el-cascader为disabled</el-button>
+    <el-button @click="changePlaceholder">修改嵌套列表input</el-button>
   </el-space>
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "element-plus-fast-form"; 
+import { useForm } from "element-plus-fast-form";
 
 import { formConfig, attrs } from "./config";
 import { ElMessage } from "element-plus";
@@ -23,7 +23,6 @@ const {
   formRef,
   rawFormValue,
   setComponentProps,
-  setFormConfig,
 } = useForm({
   ...attrs,
   formConfig,
@@ -151,17 +150,7 @@ function disabled() {
   setComponentProps("el-cascader", { disabled: true });
 }
 
-function required() {
-  setFormConfig("el-select-multiple", {
-    formItemProps: {
-      rules: [
-        {
-          required: true,
-          message: "请选择一个选项",
-          trigger: "change",
-        },
-      ],
-    },
-  });
+function changePlaceholder() {
+  setComponentProps("children.0.el-input", { placeholder: "请填写名称，长度不超过10个字符", maxlength: 10 });
 }
 </script>

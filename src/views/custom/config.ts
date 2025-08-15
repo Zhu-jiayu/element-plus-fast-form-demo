@@ -3,7 +3,7 @@ import { defineAsyncComponent } from "vue";
 // 新增表单样式配置
 export const attrs = {
   colProps: {
-    soan: 12,
+    span: 12,
   },
   rowProps: {
     gutter: 24,

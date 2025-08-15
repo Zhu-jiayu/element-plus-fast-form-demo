@@ -14,19 +14,22 @@
   <el-space>
     <el-button @click="submit" type="primary">提交</el-button>
     <el-button @click="reset">重置</el-button>
-    <el-button @click="remove">删除el-input</el-button>
+    <el-button @click="remove">删除多个表单项</el-button>
     <el-button @click="add">添加el-input2</el-button>
     <el-button @click="edit">修改el-cascader必填</el-button>
+    <el-button @click="editNested">修改嵌套列表表单项</el-button>
+  </el-space>
+
+  <el-divider>嵌套表单操作示例</el-divider>
+  <el-space>
+    <el-button @click="addNestedField" type="success">向嵌套列表添加字段</el-button>
+    <el-button @click="removeNestedFields" type="danger">删除嵌套表单项</el-button>
+    <el-button @click="addToSecondGroup" type="info">添加部门选择字段</el-button>
   </el-space>
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "element-plus-fast-form"; 
-// import { useForm } from "../../../dist/index.umd.js"; // 从构建产物引入
-
-
-// import { useForm } from "element-plus-fast-form";
-// const { useForm } = ElementPlusFastForm;
+import { useForm } from "element-plus-fast-form";
 import { watch } from "vue";
 import { formConfig, attrs } from "./config";
 import { ElMessage } from "element-plus";
@@ -59,7 +62,7 @@ const reset = () => {
   }
 };
 function remove() {
-  removeFormConfig(["el-input"]);
+  removeFormConfig(["el-input", "el-select", "el-select-multiple", "el-date-picker", "el-radio-group"]);
 }
 function add() {
   addFormConfig(
@@ -92,7 +95,8 @@ function add() {
         placeholder: "去输入",
       },
     },
-    1
+    undefined, // targetProp (不指定嵌套位置)
+    1          // index (在顶层的第1个位置插入)
   );
 }
 
@@ -108,6 +112,83 @@ function edit() {
       ],
     },
   });
+}
+
+function editNested() {
+  setFormConfig("children.0.el-input", {
+    formItemProps: {
+      label: '姓名'
+    },
+  });
+
+  setFormConfig("children.0.el-radio-group", {
+    formItemProps: {
+      rules: [{ required: true, message: "请选择" }],
+      label: '性别'
+    },
+  });
+}
+
+// 嵌套表单操作示例函数
+function addNestedField() {
+  // 向第一组（children.0）添加一个新的字段
+  addFormConfig(
+    {
+      component: "el-input",
+      formItemProps: {
+        prop: "phone",
+        label: "联系电话",
+        rules: [
+          {
+            required: true,
+            message: "请输入联系电话",
+            trigger: "blur"
+          }
+        ]
+      },
+      componentProps: {
+        placeholder: "请输入联系电话",
+        maxlength: 11
+      }
+    },
+    "children.0" // 指定添加到 children 数组的第0组
+  );
+  ElMessage.success("已向第一组添加联系电话字段");
+}
+
+function removeNestedFields() {
+  // 删除嵌套表单中的多个字段
+  removeFormConfig([
+    "children.0.phone",        // 删除第一组的联系电话（如果之前添加过）
+    "children.0.el-radio-group" // 删除第一组的单选框
+  ]);
+  ElMessage.success("已删除指定的嵌套表单项");
+}
+
+function addToSecondGroup() {
+  // 注意：这个示例假设children数组至少有两组数据
+  // 实际使用时需要确保对应索引的组已存在
+  // 这里我们先向第0组添加一个新字段作为示例
+  addFormConfig(
+    {
+      component: "el-select",
+      formItemProps: {
+        prop: "department",
+        label: "所属部门"
+      },
+      componentProps: {
+        placeholder: "请选择所属部门",
+        options: [
+          { label: "技术部", value: "tech" },
+          { label: "产品部", value: "product" },
+          { label: "运营部", value: "operation" }
+        ]
+      }
+    },
+    "children.0" // 添加到 children 数组的第0组
+
+  );
+  ElMessage.success("已向表单组添加部门选择字段");
 }
 
 watch(
@@ -130,7 +211,6 @@ watch(
 ```
 
 ```ts [config.ts]
-
 // 新增表单样式配置
 export const attrs = {
   colProps: {
@@ -350,7 +430,61 @@ export const formConfig = [
       placeholder: "去选择",
     },
   },
-  
+
+  {
+    formItemProps: {
+      prop: "children",
+      label: "children",
+    },
+    children: [
+      [
+        {
+          component: "span",
+          formItemProps: {},
+          componentProps: {
+            style: {
+              fontSize: "18px",
+              marginLeft: "-90px",
+            },
+          },
+          defaultValue: "标题",
+          colProps: {
+            span: 24,
+          },
+        },
+        {
+          component: "el-input",
+          formItemProps: {
+            prop: "el-input",
+            label: "el-input",
+            rules: [
+              {
+                required: true,
+                message: "请填写完整",
+              },
+            ],
+          },
+          componentProps: {
+            placeholder: "去输入",
+          },
+        },
+        {
+          component: "el-radio-group",
+          formItemProps: {
+            prop: "el-radio-group",
+            label: "el-radio-group",
+          },
+          componentProps: {
+            placeholder: "去选择",
+            options: [
+              { label: "是", value: "Y" },
+              { label: "否", value: "N" },
+            ],
+          },
+        },
+      ],
+    ],
+  },
 ];
 
 ```

@@ -10,8 +10,8 @@
 <template>
   <h3>表单列表</h3>
   <FastForm>
-    <template #points2="{ formValue, nestedKey }">
-      <el-input placeholder="请输入" v-model="formValue[nestedKey.prop][nestedKey.key].points2" />
+    <template #points2="{ formValue, nestedKey, nestedProp, modelValue }">
+      <el-input placeholder="请输入" v-model="formValue[nestedProp][nestedKey].points2" />
     </template>
   </FastForm>
 
@@ -111,12 +111,12 @@ export const attrs = {
     "label-suffix": "：",
     "label-width": "160",
     model: {
-      "el-input": "123",
+      "el-input": "前端管理系统开发",
       children: [
         {
-          "el-input": "123",
-          "el-radio-group": "Y",
-          "points2": "123",
+          "el-input": "张三",
+          "el-radio-group": "leader",
+          "points2": "负责前端架构设计",
         },
       ],
     },
@@ -130,38 +130,23 @@ export const formConfig = [
     component: "el-input",
     formItemProps: {
       prop: "el-input",
-      label: "el-input",
+      label: "项目名称",
       rules: [
         {
           required: true,
-          message: "请填写完整",
-        },
-        {
-          validator: (
-            _rule: any,
-            value: string,
-            callback: (arg0?: Error | undefined) => void
-          ) => {
-            if (!/^\d+$/.test(value)) {
-              return callback(new Error("请输入数字"));
-            }
-            callback();
-          },
-          trigger: ["change", "blur"],
+          message: "请输入项目名称",
         },
       ],
     },
     componentProps: {
-      placeholder: "去输入",
+      placeholder: "请输入项目名称",
     },
   },
-
-
 
   {
     formItemProps: {
       prop: "children",
-      label: "children",
+      label: "项目成员",
     },
     children: [
       [
@@ -175,7 +160,7 @@ export const formConfig = [
               marginLeft: '-90px'
             }
           },
-          defaultValue: "标题",
+          defaultValue: "成员信息",
           colProps: {
             span: 24,
           },
@@ -184,29 +169,31 @@ export const formConfig = [
           component: "el-input",
           formItemProps: {
             prop: "el-input",
-            label: "el-input",
+            label: "成员姓名",
             rules: [
               {
                 required: true,
-                message: "请填写完整",
+                message: "请输入成员姓名",
               },
             ],
           },
           componentProps: {
-            placeholder: "去输入",
+            placeholder: "请输入成员姓名",
           },
         },
         {
           component: "el-radio-group",
           formItemProps: {
             prop: "el-radio-group",
-            label: "el-radio-group",
+            label: "角色类型",
           },
           componentProps: {
-            placeholder: "去选择",
+            placeholder: "请选择角色",
             options: [
-              { label: "是", value: "Y" },
-              { label: "否", value: "N" },
+              { label: "项目经理", value: "leader" },
+              { label: "开发工程师", value: "developer" },
+              { label: "测试工程师", value: "tester" },
+              { label: "UI设计师", value: "designer" },
             ],
           },
         },
@@ -215,11 +202,11 @@ export const formConfig = [
           component: "slot",
           formItemProps: {
             prop: "points2",
-            label: "slot",
+            label: "工作职责",
             rules: [
               {
                 required: true,
-                message: "请填写完整",
+                message: "请输入工作职责",
               },
             ],
           },
@@ -230,11 +217,11 @@ export const formConfig = [
             span: 24,
           },
           component: defineAsyncComponent<any>(
-            () => import("../../components/Avatar-upload/index.vue")
+            () => import("@/components/Avatar-upload/index.vue")
           ),
           formItemProps: {
             prop: "avatar",
-            label: "头像",
+            label: "头像上传",
           },
           componentProps: {},
         },

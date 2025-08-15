@@ -1,7 +1,11 @@
-const initials = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+const cities = [
+  "北京", "上海", "广州", "深圳", "杭州", "南京", "苏州", "成都", "重庆", "武汉",
+  "西安", "青岛", "大连", "宁波", "厦门", "福州", "济南", "郑州", "长沙", "合肥",
+  "沈阳", "哈尔滨", "长春", "石家庄", "太原", "呼和浩特", "兰州", "银川", "西宁", "乌鲁木齐"
+];
 const moreOptions = Array.from({ length: 10000 }).map((_, idx) => ({
-  value: `Option ${idx + 1}`,
-  label: `${initials[idx % 10]}${idx}`,
+  value: `${cities[idx % cities.length]}-${Math.floor(idx / cities.length) + 1}`,
+  label: `${cities[idx % cities.length]}${Math.floor(idx / cities.length) > 0 ? `-${Math.floor(idx / cities.length) + 1}区` : ''}`,
 }));
 
 // 新增表单样式配置
@@ -23,10 +27,10 @@ export const attrs = {
 export const formConfig = [
   {
     component: "el-input",
-    defaultValue: "123",
+    defaultValue: "92",
     formItemProps: {
       prop: "el-input",
-      label: "el-input",
+      label: "客户满意度",
       rules: [
         {
           required: true,
@@ -48,7 +52,7 @@ export const formConfig = [
       ],
     },
     componentProps: {
-      placeholder: "去输入",
+      placeholder: "请输入满意度(1-100)",
     },
     suffix: "%",
   },

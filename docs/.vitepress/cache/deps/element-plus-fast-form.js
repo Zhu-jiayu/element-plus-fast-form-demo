@@ -22,7 +22,7 @@ import {
   __publicField
 } from "./chunk-EQCVQC35.js";
 
-// node_modules/.pnpm/element-plus-fast-form@1.3.2_@element-plus+icons-vue@2.0.0_vue@3.5.16__element-plus@2.7.4_vue@3.5.16__vue@3.5.16/node_modules/element-plus-fast-form/dist/index.es.js
+// node_modules/.pnpm/element-plus-fast-form@1.3.5_@element-plus+icons-vue@2.0.0_vue@3.5.16__element-plus@2.7.4_vue@3.5.16__vue@3.5.16/node_modules/element-plus-fast-form/dist/index.es.js
 var EOptions = ((EOptions2) => {
   EOptions2["el-select"] = "el-option";
   EOptions2["el-radio-group"] = "el-radio";
@@ -199,16 +199,16 @@ var FormCore = class {
   _generateSuffix(itemConfig) {
     return h("span", {}, [itemConfig == null ? void 0 : itemConfig.suffix]);
   }
-  _generateComponent(itemConfig, slots, nestedKey) {
+  _generateComponent(itemConfig, slots, nestedData) {
     var _a, _b, _c;
     let component = null;
     if (itemConfig.component === "slot") {
-      component = this._generateSlot(itemConfig, slots, nestedKey);
+      component = this._generateSlot(itemConfig, slots, nestedData);
     } else if (this._isVueComponent(itemConfig.component)) {
-      component = this._generateCustomComponent(itemConfig, nestedKey);
+      component = this._generateCustomComponent(itemConfig, nestedData);
     } else if (typeof (itemConfig == null ? void 0 : itemConfig.component) === "string") {
       if ((_a = itemConfig == null ? void 0 : itemConfig.component) == null ? void 0 : _a.startsWith("el-")) {
-        component = this._generateElementComponent(itemConfig, nestedKey);
+        component = this._generateElementComponent(itemConfig, nestedData);
       } else {
         component = this._generateString(itemConfig);
       }
@@ -270,24 +270,26 @@ var FormCore = class {
     });
     return methods;
   }
-  _generateElementComponent(itemConfig, nestedKey) {
+  _generateElementComponent(itemConfig, nestedData) {
     var _a, _b, _c, _d, _e, _f, _g;
     if (this._isNoFormItemProps(itemConfig)) {
       return null;
     }
     return h(resolveComponent(itemConfig.component), {
       ...itemConfig.componentProps,
-      modelValue: nestedKey ? (_c = (_b = (_a = this.formValue) == null ? void 0 : _a[nestedKey.prop]) == null ? void 0 : _b[nestedKey.key]) == null ? void 0 : _c[itemConfig.formItemProps.prop] : this.formValue[itemConfig.formItemProps.prop],
+      modelValue: nestedData ? (_c = (_b = (_a = this.formValue) == null ? void 0 : _a[nestedData.prop]) == null ? void 0 : _b[nestedData.key]) == null ? void 0 : _c[itemConfig.formItemProps.prop] : this.formValue[itemConfig.formItemProps.prop],
       "onUpdate:modelValue": (value) => {
-        if (nestedKey) {
-          this._generateNestedData(nestedKey, itemConfig.formItemProps.prop, value);
+        if (nestedData) {
+          this._generateNestedData(nestedData, itemConfig.formItemProps.prop, value);
         } else {
           this.formValue[itemConfig.formItemProps.prop] = value;
         }
       },
       style: {
         width: ((_e = (_d = itemConfig.componentProps) == null ? void 0 : _d.style) == null ? void 0 : _e.width) || "100%"
-      }
+      },
+      nestedKey: (nestedData == null ? void 0 : nestedData.key) ?? null,
+      nestedProp: (nestedData == null ? void 0 : nestedData.prop) ?? null
     }, ((_g = (_f = itemConfig == null ? void 0 : itemConfig.componentProps) == null ? void 0 : _f.options) == null ? void 0 : _g.length) && !virtualizedComponentMap.hasOwnProperty(itemConfig.component) ? {
       default: (c) => {
         var _a2;
@@ -307,34 +309,37 @@ var FormCore = class {
       ...itemConfig.componentProps
     }, defaultValue || null);
   }
-  _generateCustomComponent(itemConfig, nestedKey) {
+  _generateCustomComponent(itemConfig, nestedData) {
     var _a, _b, _c;
     const methods = this._getSubClassMethods();
     return h(itemConfig.component, {
       formValue: this.formValue,
       ...this._isNoFormItemProps(itemConfig) ? {} : {
         prop: itemConfig.formItemProps.prop,
-        modelValue: nestedKey ? (_c = (_b = (_a = this.formValue) == null ? void 0 : _a[nestedKey.prop]) == null ? void 0 : _b[nestedKey.key]) == null ? void 0 : _c[itemConfig.formItemProps.prop] : this.formValue[itemConfig.formItemProps.prop],
+        modelValue: nestedData ? (_c = (_b = (_a = this.formValue) == null ? void 0 : _a[nestedData.prop]) == null ? void 0 : _b[nestedData.key]) == null ? void 0 : _c[itemConfig.formItemProps.prop] : this.formValue[itemConfig.formItemProps.prop],
         "onUpdate:modelValue": (value) => {
-          if (nestedKey) {
-            this._generateNestedData(nestedKey, itemConfig.formItemProps.prop, value);
+          if (nestedData) {
+            this._generateNestedData(nestedData, itemConfig.formItemProps.prop, value);
           } else {
             this.formValue[itemConfig.formItemProps.prop] = value;
           }
         }
       },
+      nestedKey: (nestedData == null ? void 0 : nestedData.key) ?? null,
+      nestedProp: (nestedData == null ? void 0 : nestedData.prop) ?? null,
       ...methods,
       ...itemConfig.componentProps
     });
   }
-  _generateSlot(itemConfig, slots, nestedKey) {
+  _generateSlot(itemConfig, slots, nestedData) {
     var _a, _b, _c, _d;
     return (_d = slots == null ? void 0 : slots[itemConfig.formItemProps.prop]) == null ? void 0 : _d.call(slots, {
       formValue: this.formValue,
       ...this._isNoFormItemProps(itemConfig) ? {} : {
-        nestedKey,
-        modelValue: nestedKey ? (_c = (_b = (_a = this.formValue) == null ? void 0 : _a[nestedKey.prop]) == null ? void 0 : _b[nestedKey.key]) == null ? void 0 : _c[itemConfig.formItemProps.prop] : this.formValue[itemConfig.formItemProps.prop]
-      }
+        modelValue: nestedData ? (_c = (_b = (_a = this.formValue) == null ? void 0 : _a[nestedData.prop]) == null ? void 0 : _b[nestedData.key]) == null ? void 0 : _c[itemConfig.formItemProps.prop] : this.formValue[itemConfig.formItemProps.prop]
+      },
+      nestedKey: (nestedData == null ? void 0 : nestedData.key) ?? null,
+      nestedProp: (nestedData == null ? void 0 : nestedData.prop) ?? null
       // ...methods,
     });
   }
@@ -491,12 +496,77 @@ var Form = class extends FormCore {
     this.setFormDisabled = this.setFormDisabled.bind(this);
   }
   /**
+   * 解析嵌套prop路径
+   * @param prop prop字符串，支持格式: 
+   *   - "parentProp.index.childProp" (3段式，用于设置/删除)
+   *   - "parentProp.index" (2段式，用于添加)
+   *   - "normalProp" (普通格式)
+   * @returns 解析结果
+   */
+  _parseNestedProp(prop) {
+    const parts = prop.split(".");
+    if (parts.length === 3) {
+      const [parentProp, indexStr, childProp] = parts;
+      const childIndex = parseInt(indexStr, 10);
+      if (!isNaN(childIndex)) {
+        return {
+          isNested: true,
+          parentProp,
+          childIndex,
+          childProp,
+          originalProp: prop,
+          isAddMode: false
+        };
+      }
+    }
+    if (parts.length === 2) {
+      const [parentProp, indexStr] = parts;
+      const childIndex = parseInt(indexStr, 10);
+      if (!isNaN(childIndex)) {
+        return {
+          isNested: true,
+          parentProp,
+          childIndex,
+          originalProp: prop,
+          isAddMode: true
+        };
+      }
+    }
+    return {
+      isNested: false,
+      originalProp: prop
+    };
+  }
+  /**
+   * 根据解析后的路径找到目标配置项
+   * @param parsedProp 解析后的prop信息
+   * @returns 目标配置项
+   */
+  _findTargetConfig(parsedProp) {
+    if (!parsedProp.isNested) {
+      return this.formConfig.find((item) => item.formItemProps.prop === parsedProp.originalProp) || null;
+    }
+    const parentConfig = this.formConfig.find((item) => item.formItemProps.prop === parsedProp.parentProp);
+    if (!parentConfig || !parentConfig.children) {
+      return null;
+    }
+    if (parsedProp.isAddMode) {
+      return parentConfig;
+    }
+    const childConfigs = parentConfig.children[parsedProp.childIndex];
+    if (!Array.isArray(childConfigs)) {
+      return null;
+    }
+    return childConfigs.find((item) => item.formItemProps.prop === parsedProp.childProp) || null;
+  }
+  /**
    * 动态更新表单项的组件属性
-   * @param prop 表单项的 prop 值
+   * @param prop 表单项的 prop 值，支持嵌套格式: "parentProp.index.childProp"
    * @param componentProps 需要更新的组件属性对象
    */
   setComponentProps(prop, componentProps) {
-    const targetItem = this.formConfig.find((item) => item.formItemProps.prop === prop);
+    const parsedProp = this._parseNestedProp(prop);
+    const targetItem = this._findTargetConfig(parsedProp);
     if (targetItem) {
       if (!targetItem.componentProps) {
         targetItem.componentProps = {};
@@ -514,28 +584,62 @@ var Form = class extends FormCore {
   }
   /**
    * 更新指定表单项的配置
-   * @param prop 表单项的 prop 值
+   * @param prop 表单项的 prop 值，支持嵌套格式: "parentProp.index.childProp"
    * @param config 新的配置项
    */
   setFormConfig(prop, config) {
-    const targetIndex = this.formConfig.findIndex((item) => item.formItemProps.prop === prop);
-    if (targetIndex > -1) {
+    const parsedProp = this._parseNestedProp(prop);
+    const targetItem = this._findTargetConfig(parsedProp);
+    if (targetItem) {
       const newConfig = {
-        ...this.formConfig[targetIndex],
+        ...targetItem,
         formItemProps: {
-          ...this.formConfig[targetIndex].formItemProps,
+          ...targetItem.formItemProps,
           ...config.formItemProps || {},
-          prop
-          // Ensure prop is preserved
+          prop: parsedProp.isNested ? parsedProp.childProp : parsedProp.originalProp
+          // 确保prop正确
         },
         componentProps: {
-          ...this.formConfig[targetIndex].componentProps,
+          ...targetItem.componentProps,
           ...config.componentProps || {}
+        },
+        ...config.component && {
+          component: config.component
+        },
+        ...config.colProps && {
+          colProps: {
+            ...targetItem.colProps,
+            ...config.colProps
+          }
         }
       };
-      this.formConfig[targetIndex] = newConfig;
+      if (parsedProp.isNested) {
+        const parentConfig = this.formConfig.find((item) => item.formItemProps.prop === parsedProp.parentProp);
+        if (parentConfig && parentConfig.children) {
+          const childConfigs = parentConfig.children[parsedProp.childIndex];
+          const targetIndex = childConfigs.findIndex((item) => item.formItemProps.prop === parsedProp.childProp);
+          if (targetIndex > -1) {
+            childConfigs[targetIndex] = newConfig;
+          }
+        }
+      } else {
+        const targetIndex = this.formConfig.findIndex((item) => item.formItemProps.prop === parsedProp.originalProp);
+        if (targetIndex > -1) {
+          this.formConfig[targetIndex] = newConfig;
+        }
+      }
       if (config.hasOwnProperty("defaultValue")) {
-        this.formValue[prop] = config.defaultValue;
+        if (parsedProp.isNested) {
+          if (!this.formValue[parsedProp.parentProp]) {
+            this.formValue[parsedProp.parentProp] = [];
+          }
+          if (!this.formValue[parsedProp.parentProp][parsedProp.childIndex]) {
+            this.formValue[parsedProp.parentProp][parsedProp.childIndex] = {};
+          }
+          this.formValue[parsedProp.parentProp][parsedProp.childIndex][parsedProp.childProp] = config.defaultValue;
+        } else {
+          this.formValue[parsedProp.originalProp] = config.defaultValue;
+        }
       }
     }
   }
@@ -556,9 +660,25 @@ var Form = class extends FormCore {
   /**
    * 在指定位置添加表单配置项
    * @param config 要添加的表单配置
-   * @param index 插入的位置索引，如果不传则追加到末尾
+   * @param targetProp 目标位置，支持嵌套格式: "parentProp.index" 表示在父级数组的指定索引位置添加
+   * @param index 插入的位置索引，如果不传则追加到末尾（仅在非嵌套情况下有效）
    */
-  addFormConfig(config, index) {
+  addFormConfig(config, targetProp, index) {
+    if (!targetProp) {
+      this._addToTopLevel(config, index);
+      return;
+    }
+    const parsedTarget = this._parseNestedProp(targetProp);
+    if (parsedTarget.isNested) {
+      this._addToNestedArray(config, parsedTarget);
+    } else {
+      this._addToTopLevel(config, index);
+    }
+  }
+  /**
+   * 在顶层添加配置项
+   */
+  _addToTopLevel(config, index) {
     const exists = this.formConfig.some((item) => item.formItemProps.prop === config.formItemProps.prop);
     if (!exists) {
       const processedConfig = this._handleConfig([config])[0];
@@ -572,10 +692,56 @@ var Form = class extends FormCore {
     }
   }
   /**
+   * 在嵌套数组中添加配置项
+   */
+  _addToNestedArray(config, parsedTarget) {
+    const parentConfig = this.formConfig.find((item) => item.formItemProps.prop === parsedTarget.parentProp);
+    if (parentConfig && parentConfig.children) {
+      const childIndex = parsedTarget.childIndex;
+      const childrenLength = parentConfig.children.length;
+      if (childIndex < childrenLength) {
+        const childConfigs = parentConfig.children[childIndex];
+        const exists = childConfigs.some((item) => item.formItemProps.prop === config.formItemProps.prop);
+        if (!exists) {
+          const processedConfig = this._handleConfig([config])[0];
+          childConfigs.push(processedConfig);
+          const vals = this._initValue({}, [processedConfig]);
+          if (!this.formValue[parsedTarget.parentProp]) {
+            this.formValue[parsedTarget.parentProp] = [];
+          }
+          if (!this.formValue[parsedTarget.parentProp][parsedTarget.childIndex]) {
+            this.formValue[parsedTarget.parentProp][parsedTarget.childIndex] = {};
+          }
+          Object.assign(this.formValue[parsedTarget.parentProp][parsedTarget.childIndex], vals);
+        }
+      }
+    }
+  }
+  /**
    * 删除表单配置项
-   * @param prop 要删除的表单项的 prop 值
+   * @param props 要删除的表单项的 prop 值数组，支持嵌套格式: "parentProp.index.childProp"
    */
   removeFormConfig(props) {
+    const topLevelProps = [];
+    const nestedProps = [];
+    props.forEach((prop) => {
+      const parsedProp = this._parseNestedProp(prop);
+      if (parsedProp.isNested) {
+        nestedProps.push({
+          parsedProp,
+          originalProp: prop
+        });
+      } else {
+        topLevelProps.push(prop);
+      }
+    });
+    this._removeNestedConfigs(nestedProps);
+    this._removeTopLevelConfigs(topLevelProps);
+  }
+  /**
+   * 删除顶层配置项
+   */
+  _removeTopLevelConfigs(props) {
     const indexesToRemove = props.reduce((acc, prop) => {
       const index = this.formConfig.findIndex((item) => item.formItemProps.prop === prop);
       if (index > -1) {
@@ -591,6 +757,53 @@ var Form = class extends FormCore {
         delete this.formValue[prop];
       });
     }
+  }
+  /**
+   * 删除嵌套配置项
+   */
+  _removeNestedConfigs(nestedProps) {
+    const groupedByParent = {};
+    nestedProps.forEach((item) => {
+      const parentProp = item.parsedProp.parentProp;
+      if (!groupedByParent[parentProp]) {
+        groupedByParent[parentProp] = [];
+      }
+      groupedByParent[parentProp].push(item);
+    });
+    Object.entries(groupedByParent).forEach(([parentProp, items]) => {
+      const parentConfig = this.formConfig.find((item) => item.formItemProps.prop === parentProp);
+      if (parentConfig && parentConfig.children) {
+        const groupedByChildIndex = {};
+        items.forEach((item) => {
+          const childIndex = item.parsedProp.childIndex;
+          if (!groupedByChildIndex[childIndex]) {
+            groupedByChildIndex[childIndex] = [];
+          }
+          groupedByChildIndex[childIndex].push(item);
+        });
+        Object.entries(groupedByChildIndex).forEach(([childIndexStr, childItems]) => {
+          const childIndex = parseInt(childIndexStr, 10);
+          if (childIndex < parentConfig.children.length) {
+            const childConfigs = parentConfig.children[childIndex];
+            const indexesToRemove = [];
+            childItems.forEach((item) => {
+              const index = childConfigs.findIndex((config) => config.formItemProps.prop === item.parsedProp.childProp);
+              if (index > -1) {
+                indexesToRemove.push(index);
+              }
+            });
+            indexesToRemove.sort((a, b) => b - a);
+            indexesToRemove.forEach((index) => {
+              const childProp = childConfigs[index].formItemProps.prop;
+              childConfigs.splice(index, 1);
+              if (this.formValue[parentProp] && this.formValue[parentProp][childIndex] && this.formValue[parentProp][childIndex][childProp] !== void 0) {
+                delete this.formValue[parentProp][childIndex][childProp];
+              }
+            });
+          }
+        });
+      }
+    });
   }
   setFormDisabled(disabled) {
     this.disabled.value = disabled;

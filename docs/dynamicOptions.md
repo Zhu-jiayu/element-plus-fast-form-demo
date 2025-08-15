@@ -14,14 +14,14 @@
   <el-space>
     <el-button @click="submit" type="primary">提交</el-button>
     <el-button @click="reset">重置</el-button>
-    <el-button @click="edit">设置options</el-button>
-    <el-button @click="disabled">设置第2个disabled</el-button>
-    <el-button @click="required">设置第3个必填</el-button>
+    <el-button @click="edit">修改options</el-button>
+    <el-button @click="disabled">设置el-cascader为disabled</el-button>
+    <el-button @click="changePlaceholder">修改嵌套列表input</el-button>
   </el-space>
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "element-plus-fast-form"; 
+import { useForm } from "element-plus-fast-form";
 
 import { formConfig, attrs } from "./config";
 import { ElMessage } from "element-plus";
@@ -32,7 +32,6 @@ const {
   formRef,
   rawFormValue,
   setComponentProps,
-  setFormConfig,
 } = useForm({
   ...attrs,
   formConfig,
@@ -160,32 +159,21 @@ function disabled() {
   setComponentProps("el-cascader", { disabled: true });
 }
 
-function required() {
-  setFormConfig("el-select-multiple", {
-    formItemProps: {
-      rules: [
-        {
-          required: true,
-          message: "请选择一个选项",
-          trigger: "change",
-        },
-      ],
-    },
-  });
+function changePlaceholder() {
+  setComponentProps("children.0.el-input", { placeholder: "请填写名称，长度不超过10个字符", maxlength: 10 });
 }
 </script>
 
 ```
 
 ```ts [config.ts]
-
 // 新增表单样式配置
 export const attrs = {
   colProps: {
     span: 12,
   },
   rowProps: {
-    gutter: 12,
+    gutter: 24,
   },
   formProps: {
     "label-position": "right",
@@ -196,7 +184,6 @@ export const attrs = {
 
 // 新增表单配置
 export const formConfig = [
-  
   {
     component: "el-select",
     formItemProps: {
@@ -294,7 +281,7 @@ export const formConfig = [
       ],
     },
   },
- 
+
   {
     component: "el-tree-select",
     formItemProps: {
@@ -335,7 +322,61 @@ export const formConfig = [
       ],
     },
   },
- 
+
+  {
+    formItemProps: {
+      prop: "children",
+      label: "children",
+    },
+    children: [
+      [
+        {
+          component: "span",
+          formItemProps: {},
+          componentProps: {
+            style: {
+              fontSize: "18px",
+              marginLeft: "-90px",
+            },
+          },
+          defaultValue: "标题",
+          colProps: {
+            span: 24,
+          },
+        },
+        {
+          component: "el-input",
+          formItemProps: {
+            prop: "el-input",
+            label: "el-input",
+            rules: [
+              {
+                required: true,
+                message: "请填写完整",
+              },
+            ],
+          },
+          componentProps: {
+            placeholder: "去输入",
+          },
+        },
+        {
+          component: "el-radio-group",
+          formItemProps: {
+            prop: "el-radio-group",
+            label: "el-radio-group",
+          },
+          componentProps: {
+            placeholder: "去选择",
+            options: [
+              { label: "是", value: "Y" },
+              { label: "否", value: "N" },
+            ],
+          },
+        },
+      ],
+    ],
+  },
 ];
 
 ```

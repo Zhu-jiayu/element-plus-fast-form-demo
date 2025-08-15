@@ -103,11 +103,11 @@ export const formConfig = [
     component: "slot",
     formItemProps: {
       prop: "points",
-      label: "points",
+      label: "积分输入",
       rules: [
         {
           required: true,
-          message: "请填写完整",
+          message: "请输入积分",
         },
       ],
     },
@@ -116,11 +116,11 @@ export const formConfig = [
     component: "slot",
     formItemProps: {
       prop: "select",
-      label: "select",
+      label: "会员等级",
       rules: [
         {
           required: true,
-          message: "请选择",
+          message: "请选择会员等级",
         },
       ],
     },
