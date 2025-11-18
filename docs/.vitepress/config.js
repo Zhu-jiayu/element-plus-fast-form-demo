@@ -87,6 +87,8 @@ export default defineConfig({
     ],
 
     outline: false,
+    aside: false,
+    appearance: false,
   },
   vite: {
     plugins: [markdownBracketEscaper],

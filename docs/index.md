@@ -150,7 +150,7 @@ function useForm(config: IFormProps): IUseForm;
 | setComponentProps | prop: string, componentProps: Record<string, any> | void     | 动态设置表单项组件属性（支持嵌套）          |
 | setFormValue      | formData: Record<string, any>                     | void     | 动态设置表单数据                            |
 | setFormConfig     | prop: string, config: Partial<IFormconfig>        | void     | 动态设置表单项配置（支持嵌套）              |
-| setFormConfigs    | newFormConfig: IFormconfig[]                      | Promise<void>     | 替换整个表单配置、默认值                        |
+| setFormConfigs    | newFormConfig: IFormconfig[], isInitValue?: boolean                     | Promise<void>     | 批量替换整个表单配置, 第2个参数用于是否完全初始化数据                        |
 | addFormConfig     | config: IFormconfig, targetProp?: string, index?: number | void | 动态添加表单项（支持嵌套）              |
 | removeFormConfig  | props: string[]                                   | void     | 动态删除表单项（支持嵌套）                  |
 | setFormDisabled   | disabled: boolean                                 | void     | 禁用/启用整个表单                           |
@@ -169,8 +169,8 @@ function useForm(config: IFormProps): IUseForm;
   动态修改某个表单项的配置（如校验规则、label、组件类型等）。  
   **支持嵌套格式**：`prop` 可以是 `"parentProp.index.childProp"` 格式。
 
-- `setFormConfigs(newFormConfig)`  
-  **批量替换整个表单配置**，用于异步加载配置或动态切换表单结构。会清空原有配置和表单值，重新初始化。
+- `setFormConfigs(newFormConfig, isInitValue?)`  
+  **批量替换整个表单配置**，用于异步加载配置或动态切换表单结构。第2个参数用于是否完全初始化数据。
 
 - `addFormConfig(config, targetProp?, index?)`  
   动态添加表单项。  
@@ -331,7 +331,7 @@ export interface IUseForm {
   /** 动态设置表单项配置（支持嵌套格式：parentProp.index.childProp） */
   setFormConfig: (prop: string, config: Partial<IFormconfig>) => void;
   /** 批量替换整个表单配置 */
-  setFormConfigs: (newFormConfig: IFormconfig[]) => Promise<void>;
+  setFormConfigs: (newFormConfig: IFormconfig[], isInitValue?: boolean) => Promise<void>;
   /** 动态添加表单项（支持嵌套格式：targetProp 可为 parentProp.index） */
   addFormConfig: (config: IFormconfig, targetProp?: string, index?: number) => void;
   /** 动态删除表单项（支持嵌套格式：props 元素可为 parentProp.index.childProp） */
@@ -422,7 +422,7 @@ interface CustomComponentProps {
   /** 动态设置表单项配置（支持嵌套格式：parentProp.index.childProp） */
   setFormConfig: (prop: string, config: Partial<IFormconfig>) => void;
   /** 批量替换整个表单配置 */
-  setFormConfigs: (newFormConfig: IFormconfig[]) => Promise<void>;
+  setFormConfigs: (newFormConfig: IFormconfig[], isInitValue?: boolean) => Promise<void>;
   /** 动态添加表单项（支持嵌套格式：targetProp 可为 parentProp.index） */
   addFormConfig: (config: IFormconfig, targetProp?: string, index?: number) => void;
   /** 动态删除表单项（支持嵌套格式：props 元素可为 parentProp.index.childProp） */
