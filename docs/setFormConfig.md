@@ -18,6 +18,8 @@
     <el-button @click="add">添加el-input2</el-button>
     <el-button @click="edit">修改el-cascader必填</el-button>
     <el-button @click="editNested">修改嵌套列表表单项</el-button>
+    <el-button @click="setAllFormConfig(false)">替换整个表单(保留旧值)</el-button>
+    <el-button @click="setAllFormConfig(true)">替换整个表单(完全初始化值)</el-button>
   </el-space>
 
   <el-divider>嵌套表单操作示例</el-divider>
@@ -42,6 +44,7 @@ const {
   removeFormConfig,
   addFormConfig,
   setFormConfig,
+  setFormConfigs,
 } = useForm({
   ...attrs,
   formConfig,
@@ -189,6 +192,39 @@ function addToSecondGroup() {
 
   );
   ElMessage.success("已向表单组添加部门选择字段");
+}
+
+function setAllFormConfig(isInitValue: boolean = false) {
+  setFormConfigs([
+    {
+      component: "el-input",
+      formItemProps: {
+        prop: "el-input",
+        label: "el-input",
+        rules: [
+          {
+            required: true,
+            message: "请填写完整",
+          },
+          {
+            validator: (
+              _rule: any,
+              value: string,
+              callback: (arg0?: Error | undefined) => void
+            ) => {
+              if (/\w/.test(value)) {
+                return callback(new Error("请输入非字母数字下划线字符"));
+              }
+              callback();
+            },
+            trigger: ["change", "blur"],
+          },
+        ],
+      },
+      componentProps: {
+        placeholder: "去输入",
+      },
+    }], isInitValue);
 }
 
 watch(

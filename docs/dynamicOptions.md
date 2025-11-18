@@ -336,7 +336,6 @@ export const formConfig = [
           componentProps: {
             style: {
               fontSize: "18px",
-              marginLeft: "-90px",
             },
           },
           defaultValue: "标题",
