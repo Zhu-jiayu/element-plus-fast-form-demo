@@ -15,8 +15,8 @@ importers:
         specifier: 2.7.4
         version: 2.7.4(vue@3.5.16)
       element-plus-fast-form:
-        specifier: ^1.3.5
-        version: 1.3.5(@element-plus/icons-vue@2.0.0(vue@3.5.16))(element-plus@2.7.4(vue@3.5.16))(vue@3.5.16)
+        specifier: ^1.3.11
+        version: 1.3.11(@element-plus/icons-vue@2.0.0(vue@3.5.16))(element-plus@2.7.4(vue@3.5.16))(vue@3.5.16)
       normalize.css:
         specifier: ^8.0.1
         version: 8.0.1
@@ -783,8 +783,8 @@ packages:
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
 
-  element-plus-fast-form@1.3.5:
-    resolution: {integrity: sha512-wYKUu15zqq2YiBUGSYnwUyWRY5NrJo+YKJzJIGNF2LGAb/xO6VYNaFKJ/6/7Cnruy+r1e3pG/nH8ma3zT4Tpiw==}
+  element-plus-fast-form@1.3.11:
+    resolution: {integrity: sha512-jW4HMRjMCDIuh8wJdgadznoySF4sgYTH+jOrXqpMqO9PwMEWgnyku3QfME/a9hrTuuNO8QXM93kQFBfpLW28kQ==}
     peerDependencies:
       '@element-plus/icons-vue': ^2.0.0
       element-plus: ^2.7.4
@@ -1742,7 +1742,7 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
-  element-plus-fast-form@1.3.5(@element-plus/icons-vue@2.0.0(vue@3.5.16))(element-plus@2.7.4(vue@3.5.16))(vue@3.5.16):
+  element-plus-fast-form@1.3.11(@element-plus/icons-vue@2.0.0(vue@3.5.16))(element-plus@2.7.4(vue@3.5.16))(vue@3.5.16):
     dependencies:
       '@element-plus/icons-vue': 2.0.0(vue@3.5.16)
       element-plus: 2.7.4(vue@3.5.16)

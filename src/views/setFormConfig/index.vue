@@ -2,21 +2,23 @@
   <h3>表单项增删改示例</h3>
   <FastForm />
 
-  <el-space>
+  <el-space wrap>
     <el-button @click="submit" type="primary">提交</el-button>
     <el-button @click="reset">重置</el-button>
-    <el-button @click="remove">删除多个表单项</el-button>
+    <el-button @click="remove(true)">删除多个表单项(删除旧值)</el-button>
+    <el-button @click="remove(false)">删除多个表单项(保留旧值)</el-button>
     <el-button @click="add">添加el-input2</el-button>
     <el-button @click="edit">修改el-cascader必填</el-button>
     <el-button @click="editNested">修改嵌套列表表单项</el-button>
+    <el-button @click="setAllFormConfig(true)">替换整个表单(删除旧值)</el-button>
     <el-button @click="setAllFormConfig(false)">替换整个表单(保留旧值)</el-button>
-    <el-button @click="setAllFormConfig(true)">替换整个表单(完全初始化值)</el-button>
   </el-space>
 
   <el-divider>嵌套表单操作示例</el-divider>
   <el-space>
     <el-button @click="addNestedField" type="success">向嵌套列表添加字段</el-button>
-    <el-button @click="removeNestedFields" type="danger">删除嵌套表单项</el-button>
+    <el-button @click="removeNestedFields(true)" type="danger">删除嵌套表单项(删除旧值)</el-button>
+    <el-button @click="removeNestedFields(false)" type="danger">删除嵌套表单项(保留旧值)</el-button>
     <el-button @click="addToSecondGroup" type="info">添加部门选择字段</el-button>
   </el-space>
 </template>
@@ -55,8 +57,9 @@ const reset = () => {
     formRef.value.resetFields();
   }
 };
-function remove() {
-  removeFormConfig(["el-input", "el-select", "el-select-multiple", "el-date-picker", "el-radio-group"]);
+function remove(isRemoveValue: boolean = true) {
+  removeFormConfig(["el-input", "el-select", "el-select-multiple", "el-date-picker", "el-radio-group"], isRemoveValue);
+  console.log("remove----formValue", formValue);
 }
 function add() {
   addFormConfig(
@@ -150,13 +153,14 @@ function addNestedField() {
   ElMessage.success("已向第一组添加联系电话字段");
 }
 
-function removeNestedFields() {
+function removeNestedFields(isRemoveValue: boolean = true) {
   // 删除嵌套表单中的多个字段
   removeFormConfig([
     "children.0.phone",        // 删除第一组的联系电话（如果之前添加过）
     "children.0.el-radio-group" // 删除第一组的单选框
-  ]);
+  ], isRemoveValue);
   ElMessage.success("已删除指定的嵌套表单项");
+  console.log("removeNestedFields----formValue", formValue);
 }
 
 function addToSecondGroup() {
@@ -185,7 +189,7 @@ function addToSecondGroup() {
   ElMessage.success("已向表单组添加部门选择字段");
 }
 
-function setAllFormConfig(isInitValue: boolean = false) {
+function setAllFormConfig(isRemoveValue: boolean = false) {
   setFormConfigs([
     {
       component: "el-input",
@@ -215,7 +219,8 @@ function setAllFormConfig(isInitValue: boolean = false) {
       componentProps: {
         placeholder: "去输入",
       },
-    }], isInitValue);
+      defaultValue: '他'
+    }], isRemoveValue);
 }
 
 watch(
