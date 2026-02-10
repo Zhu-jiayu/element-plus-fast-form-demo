@@ -24,8 +24,9 @@ import DemoUseForm from '../../../src/views/useForm/index.vue'
 export default {
   ...DefaultTheme,
   enhanceApp({ app }) {
-    document.documentElement.classList.remove('dark')
-  
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.remove('dark')
+    }
     app.use(ElementPlus)
     app.component('DemoCustom', DemoCustom)
     app.component('DemoDefaultValue', DemoDefaultValue)
