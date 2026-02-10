@@ -1,0 +1,8 @@
+/* 文档内容区 h2 样式 */
+.vp-doc h2 {
+  border-top: none;
+  margin-top: 0;
+}
+.VPDoc {
+  padding: 16px!important
+}

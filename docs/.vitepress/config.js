@@ -55,40 +55,60 @@ export default defineConfig({
   base: "/element-plus-fast-form-demo/", // 添加此行，如果部署到 GitHub Pages 的子目录
   title: "element-plus-fast-form 文档",
   description: "基于 Vue3 + Element Plus 的表单组件封装案例",
+  appearance: false,
   themeConfig: {
     nav: [
       //   { text: '首页', link: '/useForm' },
     ],
     sidebar: [
+      { text: "API文档 ", link: "/" },
       {
-        text: "文档",
+        text: '基础用法',
         items: [
-          { text: "API文档 ", link: "/" },
+          { text: 'element-plus组件', link: '/basic/element' },
+          { text: '基础用法-slot插槽', link: '/basic/slot' },
+          { text: '基础用法-自定义组件', link: '/basic/custom' },
+          { text: '文本组件', link: '/basic/string' }
         ],
       },
       {
-        text: "方法示例",
+        text: '表单列表',
         items: [
-          { text: "基础用法", link: "/useForm" },
-          { text: "表单默认值", link: "/defaultValue" },
-          { text: "slot插槽", link: "/slot" },
-          { text: "自定义组件", link: "/custom" },
-          { text: "文本组件", link: "/string" },
-          { text: "异步表单", link: "/setFormConfigs" },
-          { text: "嵌套表单(表单列表)", link: "/formlist" },
-          { text: "多表单实例", link: "/multipleForm" },
-          { text: "动态组件属性", link: "/dynamicOptions" },
-          { text: "表单项增删改", link: "/setFormConfig" },
-          { text: "表单项联动(hooks方法)", link: "/linkage" },
-          { text: "表单项联动(自定义组件)", link: "/linkage2" },
-          { text: "表单项联动(slot)", link: "/linkage3" },
+          { text: '列表基础', link: '/formlist/base' },
+          { text: '列表方法', link: '/formlist/list-methods' },
+          { text: '操作按钮展示和位置', link: '/formlist/operate-display' },
+          { text: '自定义操作按钮(组件)', link: '/formlist/custom' },
+          { text: '自定义操作按钮(h函数)', link: '/formlist/custom-h' }
         ],
       },
+      {
+        text: '表单方法',
+        items: [
+          { text: '表单禁启用', link: '/form-methods/enable-disable' },
+          { text: '设置组件属性', link: '/form-methods/dynamic-options' },
+          { text: '表单项增删改', link: '/form-methods/set-config' }
+        ],
+      },
+      {
+        text: '表单项联动',
+        items: [
+          { text: 'hooks方法', link: '/linkage/hooks' },
+          { text: '表单项联动-自定义组件', link: '/linkage/custom' },
+          { text: '表单项联动-slot插槽', link: '/linkage/slot' }
+        ],
+      },
+      {
+        text: '其他表单场景',
+        items: [
+          { text: '表单默认值', link: '/other-scenarios/default-value' },
+          { text: '异步表单', link: '/other-scenarios/async-form' },
+          { text: '多表单实例', link: '/other-scenarios/multiple-form' }
+        ],
+      }
     ],
 
     outline: false,
     aside: false,
-    appearance: false,
   },
   vite: {
     plugins: [markdownBracketEscaper],

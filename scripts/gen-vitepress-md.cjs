@@ -7,6 +7,42 @@ const path = require('path');
 const viewsDir = path.resolve(__dirname, '../src/views');
 const srcDir = path.resolve(__dirname, '../src');
 const docsDir = path.resolve(__dirname, '../docs');
+const routerPath = path.resolve(__dirname, '../src/router/index.ts');
+
+/**
+ * 从 router 中解析出「文档路径 → view 目录」映射，与 sidebar 一致，避免 404
+ * 返回 [{ routePath: 'basic/element', viewDir: 'useForm' }, ...]
+ */
+function parseRouterToDocRoutes() {
+  const routerContent = fs.readFileSync(routerPath, 'utf-8');
+  const entries = [];
+  const parentRegex = /\{\s*path:\s*"(\/[^"]+)",\s*name:\s*"[^"]+"[\s\S]*?children:\s*\[/g;
+  let parentMatch;
+  const parents = [];
+  while ((parentMatch = parentRegex.exec(routerContent)) !== null) {
+    parents.push({
+      pathPrefix: parentMatch[1].replace(/^\//, ''), // 去掉开头的 /
+      startIndex: parentMatch.index,
+      blockStart: parentMatch.index + parentMatch[0].length,
+    });
+  }
+  for (let i = 0; i < parents.length; i++) {
+    const parent = parents[i];
+    const contentEnd = i < parents.length - 1 ? parents[i + 1].startIndex : routerContent.length;
+    const blockContent = routerContent.slice(parent.blockStart, contentEnd);
+    const closing = blockContent.indexOf('],');
+    const childrenContent = closing >= 0 ? blockContent.slice(0, closing) : blockContent;
+    const childRegex = /\{\s*path:\s*"([^"]+)",\s*name:\s*"[^"]+",[\s\S]*?import\s*\([^)]*["']\.\.\/views\/([^/"']+)\//g;
+    let childMatch;
+    while ((childMatch = childRegex.exec(childrenContent)) !== null) {
+      const childPath = childMatch[1];
+      const viewDir = childMatch[2];
+      const routePath = parent.pathPrefix ? `${parent.pathPrefix}/${childPath}` : childPath;
+      entries.push({ routePath, viewDir });
+    }
+  }
+  return entries;
+}
 
 function toPascalCase(str) {
   return str.replace(/(^|[-_/])(\w)/g, (_, __, c) => c ? c.toUpperCase() : '');
@@ -230,52 +266,46 @@ function genMarkdown({ dir, vueContent, jsFiles, componentFiles }) {
   return md;
 }
 
-// 主要执行逻辑
-fs.readdirSync(viewsDir).forEach(dir => {
+// 主要执行逻辑：按路由映射生成文档，路径与 sidebar 一致，避免 404
+const docRoutes = parseRouterToDocRoutes();
+console.log(`从 router 解析到 ${docRoutes.length} 个文档路由\n`);
+
+docRoutes.forEach(({ routePath, viewDir }) => {
+  const dir = viewDir;
   const dirPath = path.join(viewsDir, dir);
-  if (!fs.statSync(dirPath).isDirectory()) return;
-  
+  if (!fs.existsSync(dirPath) || !fs.statSync(dirPath).isDirectory()) {
+    console.warn(`[${routePath}] 跳过：views/${dir} 不存在`);
+    return;
+  }
+
   const vuePath = path.join(dirPath, 'index.vue');
   let vueContent = '';
   let componentFiles = [];
-  
+
   if (fs.existsSync(vuePath)) {
     vueContent = fs.readFileSync(vuePath, 'utf-8');
-    
-    // 收集Vue文件引用的组件
     componentFiles = collectComponentFiles(vuePath);
   }
-  
-  // 查找同级 js/ts 配置文件
+
   const jsFiles = collectJsFiles(dirPath);
-  
-  // 收集配置文件中引用的组件
   jsFiles.forEach(jsFile => {
     const jsPath = path.join(dirPath, jsFile.name);
     const jsComponentFiles = collectComponentFiles(jsPath);
-    // 合并组件文件，避免重复
     jsComponentFiles.forEach(comp => {
       if (!componentFiles.find(existing => existing.path === comp.path)) {
         componentFiles.push(comp);
       }
     });
   });
-  
-  console.log(`[${dir}] 发现 ${componentFiles.length} 个组件文件`);
-  
-  // 打印发现的组件文件路径（调试用）
-  componentFiles.forEach(f => {
-    if (f.path !== vuePath) { // 不打印主文件
-      console.log(`  - ${f.relativePath}`);
-    }
-  });
-  
 
-  
   if (!vueContent && jsFiles.length === 0) return;
-  
+
   const md = genMarkdown({ dir, vueContent, jsFiles, componentFiles });
-  const mdPath = path.join(docsDir, dir + '.md');
-  fs.writeFileSync(mdPath, md);
-  console.log(`已生成 ${mdPath}`);
+  const mdFilePath = path.join(docsDir, routePath + '.md');
+  const mdDir = path.dirname(mdFilePath);
+  if (!fs.existsSync(mdDir)) {
+    fs.mkdirSync(mdDir, { recursive: true });
+  }
+  fs.writeFileSync(mdFilePath, md);
+  console.log(`已生成 ${routePath}.md <- views/${dir}`);
 });

@@ -20,7 +20,7 @@ export const attrs = {
     "label-position": "right",
     "label-suffix": "：",
     "label-width": "160",
-    "disabled": true,
+    disabled: false,
   },
 };
 
@@ -187,7 +187,7 @@ export const formConfig = [
   {
     component: "el-checkbox-group",
     formItemProps: {
-      prop: "el-checkbox-group",
+      prop: "hobby",
       label: "兴趣爱好",
     },
     componentProps: {

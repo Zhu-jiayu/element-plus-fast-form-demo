@@ -1,6 +1,7 @@
 <template>
   <div style="min-height:100vh;display:flex;flex-direction:column;">
-    <div style="height:56px;display:flex;align-items:center;padding-left:24px;background:#fff;box-shadow:0 2px 8px #f0f1f2;z-index:10;position:sticky;top:0;">
+    <div
+      style="height:56px;display:flex;align-items:center;padding-left:24px;background:#fff;box-shadow:0 2px 8px #f0f1f2;z-index:10;position:sticky;top:0;">
       <a href="/useForm" style="display:flex;align-items:center;text-decoration:none;">
         <span style="font-weight:bold;font-size:20px;color:#333;">element-plus-fast-form1</span>
       </a>

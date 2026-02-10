@@ -1,7 +1,7 @@
 import {
   delete_default,
   plus_default
-} from "./chunk-OPMHOXNV.js";
+} from "./chunk-AX6YZBBL.js";
 import {
   Fragment,
   createVNode,
@@ -18,12 +18,12 @@ import {
   resolveComponent,
   toRaw,
   watch
-} from "./chunk-2PGDDOS4.js";
+} from "./chunk-2P5ALQWM.js";
 import {
   __publicField
 } from "./chunk-EQCVQC35.js";
 
-// node_modules/.pnpm/element-plus-fast-form@1.3.11_@element-plus+icons-vue@2.0.0_vue@3.5.16__element-plus@2.7.4_vue@3.5.16__vue@3.5.16/node_modules/element-plus-fast-form/dist/index.es.js
+// node_modules/element-plus-fast-form/dist/index.es.js
 var EOptions = ((EOptions2) => {
   EOptions2["el-select"] = "el-option";
   EOptions2["el-radio-group"] = "el-radio";
@@ -146,16 +146,26 @@ function cloneDeepWith(value, customizer, map = /* @__PURE__ */ new WeakMap()) {
       return value;
   }
 }
-var groupRow = "_groupRow_72w7s_8";
-var border = "_border_72w7s_13";
-var hasOperate = "_hasOperate_72w7s_20";
-var operate = "_operate_72w7s_24";
-var hasSuffix = "_hasSuffix_72w7s_30";
+var formItem = "_form-item_7wrnj_1";
+var elFormItemContent = "_el-form-item__content_7wrnj_1";
+var groupRow = "_groupRow_7wrnj_8";
+var border = "_border_7wrnj_13";
+var operate = "_operate_7wrnj_21";
+var operatetl = "_operatetl_7wrnj_25";
+var operatetr = "_operatetr_7wrnj_31";
+var operatebl = "_operatebl_7wrnj_37";
+var operatebr = "_operatebr_7wrnj_43";
+var hasSuffix = "_hasSuffix_7wrnj_50";
 var styles = {
+  formItem,
+  elFormItemContent,
   groupRow,
   border,
-  hasOperate,
   operate,
+  operatetl,
+  operatetr,
+  operatebl,
+  operatebr,
   hasSuffix
 };
 function randomHashStr() {
@@ -182,6 +192,9 @@ var FormCore = class {
     __publicField(this, "formProps", {});
     __publicField(this, "disabled", ref(false));
     __publicField(this, "showOperate", true);
+    __publicField(this, "operatePosition", "br");
+    __publicField(this, "showOperateAdd", true);
+    __publicField(this, "showOperateDelete", true);
     var _a, _b;
     const processedConfig = this._handleConfig(config.formConfig);
     this.formConfig = reactive(processedConfig);
@@ -191,6 +204,10 @@ var FormCore = class {
     this.disabled.value = ((_a = this.formProps) == null ? void 0 : _a.disabled) ?? false;
     const model = this._handleConfig(((_b = this.formProps) == null ? void 0 : _b.model) || {});
     this.showOperate = config.showOperate ?? true;
+    this.operatePosition = config.operatePosition ?? "br";
+    this.operateButtons = config.operateButtons;
+    this.showOperateAdd = config.showOperateAdd ?? true;
+    this.showOperateDelete = config.showOperateDelete ?? true;
     const vals = this._initValue(model, processedConfig);
     Object.assign(this.formValue, vals);
     this.formValue = reactive(this.formValue);
@@ -249,6 +266,28 @@ var FormCore = class {
   }
   _isVueComponent(arg) {
     return Object.prototype.hasOwnProperty.call(arg, "render") || Object.prototype.hasOwnProperty.call(arg, "setup");
+  }
+  /**
+   * 判断按钮类型并渲染
+   * 参考 _generateComponent 中的 3 种类型判断逻辑
+   * @param button 按钮配置（可能是 VNode、Vue 组件或函数）
+   * @param props 传递给按钮的属性
+   * @returns 渲染后的 VNode
+   */
+  _renderButton(button, props) {
+    if (!button) {
+      return null;
+    }
+    if (typeof button === "object" && button !== null && "type" in button && !this._isVueComponent(button)) {
+      return button;
+    }
+    if (this._isVueComponent(button)) {
+      return h(button, props);
+    }
+    if (typeof button === "function") {
+      return button(props);
+    }
+    return null;
   }
   _isNoFormItemProps(itemConfig) {
     var _a, _b;
@@ -391,6 +430,73 @@ var FormCore = class {
       Object.assign(this.formValue, vals);
     }
   }
+  /**
+   * 渲染操作按钮
+   * @param prop 表单属性
+   * @param ckey 当前索引
+   */
+  _renderOperateButtons(prop, ckey) {
+    var _a, _b;
+    const buttons = [];
+    if (this.showOperateAdd) {
+      if ((_a = this.operateButtons) == null ? void 0 : _a.addButton) {
+        const addBtn = this._renderButton(this.operateButtons.addButton, {
+          onClick: () => this.addItem(prop),
+          prop,
+          index: ckey,
+          length: this.formValue[prop].length
+        });
+        if (addBtn) {
+          buttons.push(addBtn);
+        }
+      } else {
+        buttons.push(h(resolveComponent("el-button"), {
+          icon: plus_default,
+          circle: true,
+          size: "small",
+          onClick: () => {
+            this.addItem(prop);
+          }
+        }));
+      }
+    }
+    if (this.showOperateDelete) {
+      if ((_b = this.operateButtons) == null ? void 0 : _b.deleteButton) {
+        const deleteBtn = this._renderButton(this.operateButtons.deleteButton, {
+          onClick: () => this.removeItem(prop, ckey),
+          prop,
+          index: ckey,
+          length: this.formValue[prop].length
+        });
+        if (deleteBtn) {
+          buttons.push(deleteBtn);
+        }
+      } else {
+        buttons.push(h(resolveComponent("el-popconfirm"), {
+          title: "确定删除吗？",
+          "confirm-button-text": "确定",
+          "cancel-button-text": "取消",
+          onConfirm: () => {
+            this.removeItem(prop, ckey);
+          }
+        }, {
+          reference: () => h(resolveComponent("el-button"), {
+            icon: delete_default,
+            circle: true,
+            size: "small"
+          })
+        }));
+      }
+    }
+    const validButtons = buttons.filter((btn) => btn !== null);
+    if (validButtons.length === 0) {
+      return null;
+    }
+    return h("div", {
+      class: [styles.operate, styles[`operate${this.operatePosition}`]],
+      "data-position": this.operatePosition
+    }, validButtons);
+  }
   getform() {
     return defineComponent({
       setup: (_props, {
@@ -418,7 +524,7 @@ var FormCore = class {
                   var _a3;
                   return createVNode(resolveComponent("el-row"), mergeProps(this.rowProps || {}, {
                     "gutter": ((_a3 = this.rowProps) == null ? void 0 : _a3.gutter) || 24,
-                    "class": [styles.border, this.showOperate ? styles.hasOperate : ""]
+                    "class": [styles.border]
                   }), {
                     default: () => [citem == null ? void 0 : citem.map((c) => {
                       var _a4, _b2, _c;
@@ -441,29 +547,7 @@ var FormCore = class {
                           })];
                         }
                       });
-                    }), this.showOperate && createVNode("div", {
-                      "class": styles.operate
-                    }, [createVNode(resolveComponent("el-button"), {
-                      "icon": plus_default,
-                      "circle": true,
-                      "size": "small",
-                      "onClick": () => {
-                        this.addItem(item.formItemProps.prop);
-                      }
-                    }, null), ckey > 0 ? createVNode(resolveComponent("el-popconfirm"), {
-                      "title": "确定删除吗？",
-                      "onConfirm": () => {
-                        this.removeItem(item.formItemProps.prop, ckey);
-                      },
-                      "confirm-button-text": "确定",
-                      "cancel-button-text": "取消"
-                    }, {
-                      reference: createVNode(resolveComponent("el-button"), {
-                        "icon": delete_default,
-                        "circle": true,
-                        "size": "small"
-                      }, null)
-                    }) : null])]
+                    }), this.showOperate && this._renderOperateButtons(item.formItemProps.prop, ckey)]
                   });
                 })]) : createVNode(resolveComponent("el-col"), mergeProps((item == null ? void 0 : item.colProps) || this.colProps || {}, {
                   "span": ((_a2 = item == null ? void 0 : item.colProps) == null ? void 0 : _a2.span) || ((_b = this.colProps) == null ? void 0 : _b.span) || 8,
@@ -911,7 +995,7 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
 }
 if (typeof document !== "undefined") {
   const style = document.createElement("style");
-  style.textContent = "._form-item_72w7s_1 :deep(._el-form-item__content_72w7s_1 > *){width:100%}._form-item_72w7s_1 .el-form-item__content>*{width:100%}._groupRow_72w7s_8{width:100%;padding:0 24px 24px}._border_72w7s_13{border:1px solid #dcdfe6;padding:12px;margin-bottom:12px;border-radius:8px;position:relative}._border_72w7s_13._hasOperate_72w7s_20{padding-bottom:24px}._operate_72w7s_24{position:absolute;right:8px;bottom:8px}._hasSuffix_72w7s_30{display:flex;align-items:center}._hasSuffix_72w7s_30>*:last-child{margin-left:8px;font-size:14px}._hasSuffix_72w7s_30>*:first-child{flex:1;width:unset!important}\n";
+  style.textContent = "._form-item_7wrnj_1 :deep(._el-form-item__content_7wrnj_1 > *){width:100%}._form-item_7wrnj_1 .el-form-item__content>*{width:100%}._groupRow_7wrnj_8{width:100%;padding:0 24px 24px}._border_7wrnj_13{border:1px solid #dcdfe6;padding:12px;margin-bottom:12px;border-radius:8px;position:relative}._operate_7wrnj_21{position:absolute;display:flex}._operate_7wrnj_21._operatetl_7wrnj_25{inset:8px auto auto 8px}._operate_7wrnj_21._operatetr_7wrnj_31{inset:8px 8px auto auto}._operate_7wrnj_21._operatebl_7wrnj_37{inset:auto auto 8px 8px}._operate_7wrnj_21._operatebr_7wrnj_43{inset:auto 8px 8px auto}._hasSuffix_7wrnj_50{display:flex;align-items:center}._hasSuffix_7wrnj_50>*:last-child{margin-left:8px;font-size:14px}._hasSuffix_7wrnj_50>*:first-child{flex:1;width:unset!important}\n";
   document.head.appendChild(style);
 }
 export {

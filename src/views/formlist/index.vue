@@ -7,9 +7,6 @@
   </FastForm>
 
   <el-space>
-    <el-button @click="add" type="primary">添加1个相同表单</el-button>
-    <el-button @click="customeAdd" type="primary">添加1个不同表单</el-button>
-    <el-button @click="remove" type="primary">删除第2个</el-button>
     <el-button @click="submit" type="primary">提交</el-button>
     <el-button @click="reset">重置</el-button>
     <el-button @click="setFormDisabled(false)">启用表单</el-button>
@@ -23,7 +20,7 @@ import { useForm } from "element-plus-fast-form";
 import { formConfig, attrs } from "./config";
 import { ElMessage } from "element-plus";
 
-const { FastForm, formValue, formRef, addItem, removeItem, setFormDisabled, setFormValue } = useForm({
+const { FastForm, formValue, formRef, setFormDisabled, setFormValue } = useForm({
   ...attrs,
   formConfig,
 });
@@ -42,35 +39,6 @@ const reset = () => {
   if (formRef.value) {
     formRef.value.resetFields();
   }
-};
-
-const add = () => {
-  addItem("children");
-};
-const customeAdd = () => {
-  addItem("children",
-    [
-      {
-        component: "el-input",
-        formItemProps: {
-          prop: "input2",
-          label: "输入框",
-          rules: [
-            {
-              required: true,
-              message: "请输入",
-            },
-          ],
-        },
-        componentProps: {
-          placeholder: "请输入",
-        },
-      }
-
-    ]);
-};
-const remove = () => {
-  removeItem("children", 1);
 };
 
 const setFormVal = () => {

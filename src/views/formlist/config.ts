@@ -1,4 +1,6 @@
-import { defineAsyncComponent } from "vue";
+import { defineAsyncComponent, h } from "vue";
+import AddButton from "./components/AddButton.vue";
+import DeleteButton from "./components/DeleteButton.vue";
 
 // 新增表单样式配置
 export const attrs = {
@@ -23,7 +25,6 @@ export const attrs = {
       ],
     },
   },
-  showOperate: true,
 };
 
 // 新增表单配置
@@ -94,8 +95,6 @@ export const formConfig = [
             options: [
               { label: "项目经理", value: "leader" },
               { label: "开发工程师", value: "developer" },
-              { label: "测试工程师", value: "tester" },
-              { label: "UI设计师", value: "designer" },
             ],
           },
         },

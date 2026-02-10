@@ -43,6 +43,7 @@ export const formConfig = [
     componentProps: {
       placeholder: "去输入",
     },
+    defaultValue: '我'
   },
 
   {

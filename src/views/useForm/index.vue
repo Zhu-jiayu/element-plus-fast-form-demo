@@ -6,13 +6,15 @@
     <el-button @click="submit" type="primary">提交</el-button>
     <el-button @click="reset">重置</el-button>
     <el-button @click="edit">赋值</el-button>
-    <el-button @click="setFormDisabled(false)">启用表单</el-button>
-    <el-button @click="setFormDisabled(true)">禁用表单</el-button>
   </el-space>
 </template>
 
 <script lang="ts" setup>
+// import { useForm } from "../../../dist/index.umd.js"; // 从构建产物引入
 import { useForm } from "element-plus-fast-form";
+
+// import { useForm } from "element-plus-fast-form";
+// const { useForm } = ElementPlusFastForm;
 import { ref, watch, reactive } from "vue";
 import { formConfig, attrs } from "./config";
 import { ElMessage } from "element-plus";
@@ -22,7 +24,6 @@ const {
   formValue,
   formRef,
   rawFormValue,
-  setFormDisabled,
   setFormValue,
 } = useForm({
   ...attrs,
@@ -51,7 +52,7 @@ function edit() {
     "el-cascader": ['艺术', '1-1'],
     "el-select-multiple": ["A", "B"],
     "el-radio-group": "Y",
-    "el-checkbox-group": ["1", "2"],
+    "hobby": ["reading"],
     "el-input-number": 10,
     "el-date-picker": "2021-01-01",
     "el-time-picker": "12:00:00",

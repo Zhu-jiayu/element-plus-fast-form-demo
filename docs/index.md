@@ -50,6 +50,10 @@
 - 提供 addItem 和 removeItem 方法动态增删列表项
 - 每个列表项可包含多个表单字段
 - 支持在嵌套表单中使用插槽或自定义组件
+- **自定义操作按钮**：支持自定义添加/删除按钮的样式、位置和显示逻辑
+  - 支持通过组件、h 函数或 VNode 方式自定义按钮
+  - 支持配置按钮位置（左上、右上、左下、右下）
+  - 支持控制添加/删除按钮的显示与隐藏
 
 ### 5. 表单联动功能
 
@@ -213,6 +217,7 @@ setComponentProps("addresses.0.street", {
 });
 ```
 
+
 ## 类型定义
 
 ### 1. IOptions
@@ -290,6 +295,60 @@ export interface IFormProps<T = IFormconfig> {
   formProps?: Record<string, any>;
   /** 是否显示嵌套表单操作按钮 */
   showOperate?: boolean;
+  /** 操作按钮位置配置，默认 'br'（下右） */
+  operatePosition?: 'tl' | 'tr' | 'bl' | 'br';
+  /** 自定义操作按钮配置 */
+  operateButtons?: IOperateButtons;
+  /** 是否显示添加按钮，默认 true */
+  showOperateAdd?: boolean;
+  /** 是否显示删除按钮，默认 true */
+  showOperateDelete?: boolean;
+}
+```
+
+### 3.1. OperatePosition
+
+```ts
+/**
+ * 操作按钮位置枚举
+ */
+export type OperatePosition = 'tl' | 'tr' | 'bl' | 'br';
+```
+
+- `'tl'`: 左上（top-left）
+- `'tr'`: 右上（top-right）
+- `'bl'`: 左下（bottom-left）
+- `'br'`: 右下（bottom-right，默认值）
+
+### 3.2. IOperateButtonProps
+
+```ts
+/**
+ * 操作按钮参数接口
+ */
+export interface IOperateButtonProps {
+  /** 点击事件处理函数 */
+  onClick: () => void;
+  /** 表单属性名 */
+  prop: string;
+  /** 当前索引 */
+  index: number;
+  /** 当前长度 */
+  length: number;
+}
+```
+
+### 3.3. IOperateButtons
+
+```ts
+/**
+ * 自定义操作按钮配置
+ */
+export interface IOperateButtons {
+  /** 自定义添加按钮（VNode、组件或返回 VNode 的函数） */
+  addButton?: VNode | Component | ((props: IOperateButtonProps) => VNode);
+  /** 自定义删除按钮（VNode、组件或返回 VNode 的函数） */
+  deleteButton?: VNode | Component | ((props: IOperateButtonProps) => VNode);
 }
 ```
 
@@ -599,3 +658,206 @@ interface ElementComponentProps {
 - 透传的方法包括表单操作方法（如 `addItem`、`removeItem`）和动态配置方法（如 `setComponentProps`、`setFormValue` 等）
 - 嵌套表单中的组件会额外获得 `nestedKey` 参数
 - 组件的双向绑定通过 `modelValue` 和 `onUpdate:modelValue` 实现
+
+
+## 表单列表自定义操作按钮
+
+表单列表（嵌套表单）支持自定义操作按钮，包括添加和删除按钮的样式、位置和显示逻辑。
+
+### 基本配置
+
+```typescript
+import { useForm } from "element-plus-fast-form";
+
+const { FastForm, formValue } = useForm({
+  formConfig: [
+    {
+      formItemProps: { prop: "children", label: "项目成员" },
+      children: [
+        [
+          // 表单项配置...
+        ],
+      ],
+    },
+  ],
+  // 显示操作按钮（默认 true）
+  showOperate: true,
+  // 操作按钮位置：'tl' | 'tr' | 'bl' | 'br'（默认 'br'）
+  operatePosition: 'br',
+  // 是否显示添加按钮（默认 true）
+  showOperateAdd: true,
+  // 是否显示删除按钮（默认 true）
+  showOperateDelete: true,
+});
+```
+
+### 方式一：使用组件自定义按钮
+
+```typescript
+import AddButton from "./components/AddButton.vue";
+import DeleteButton from "./components/DeleteButton.vue";
+
+const { FastForm, formValue } = useForm({
+  formConfig: [
+    // ...表单配置
+  ],
+  showOperate: true,
+  operatePosition: 'tr',
+  operateButtons: {
+    // 使用 Vue 组件
+    addButton: AddButton,
+    deleteButton: DeleteButton,
+  },
+});
+```
+
+**自定义按钮组件示例（AddButton.vue）：**
+
+```vue
+<template>
+  <el-button type="primary" @click="handleClick">
+    添加成员
+  </el-button>
+</template>
+
+<script setup lang="ts">
+import type { IOperateButtonProps } from "element-plus-fast-form";
+
+// 接收操作按钮参数
+const props = defineProps<IOperateButtonProps>();
+
+const handleClick = () => {
+  // 调用传入的 onClick 方法
+  props.onClick();
+};
+</script>
+```
+
+### 方式二：使用 h 函数自定义按钮
+
+```typescript
+import { h, resolveComponent } from "vue";
+import type { IOperateButtonProps } from "element-plus-fast-form";
+
+// 自定义添加按钮
+function renderAddButton(props: IOperateButtonProps) {
+  return h(resolveComponent("el-button"), {
+    type: "primary",
+    onClick: props.onClick,
+  }, "添加");
+}
+
+// 自定义删除按钮（可根据条件控制显示）
+function renderDeleteButton(props: IOperateButtonProps) {
+  // 当只有一项时，不显示删除按钮
+  if (props.length <= 1) {
+    return null;
+  }
+  return h(resolveComponent("el-button"), {
+    type: "danger",
+    onClick: props.onClick,
+  }, "删除");
+}
+
+const { FastForm, formValue } = useForm({
+  formConfig: [
+    // ...表单配置
+  ],
+  showOperate: true,
+  operatePosition: 'tr',
+  operateButtons: {
+    // 使用函数返回 VNode
+    addButton: renderAddButton,
+    deleteButton: renderDeleteButton,
+  },
+});
+```
+
+### 方式三：使用 VNode 自定义按钮
+
+```typescript
+import { h, resolveComponent } from "vue";
+
+const { FastForm, formValue } = useForm({
+  formConfig: [
+    // ...表单配置
+  ],
+  showOperate: true,
+  operatePosition: 'tr',
+  operateButtons: {
+    // 直接使用 VNode（注意：这种方式无法访问动态参数）
+    addButton: h(resolveComponent("el-button"), {
+      type: "primary",
+    }, "添加"),
+  },
+});
+```
+
+#### 操作按钮参数说明
+
+自定义按钮函数或组件会接收以下参数：
+
+- `onClick`: 点击事件处理函数，调用后会执行添加/删除操作
+- `prop`: 表单属性名（嵌套表单的 prop）
+- `index`: 当前列表项的索引（删除按钮时使用）
+- `length`: 当前列表的总长度
+
+#### 完整示例
+
+```typescript
+import { useForm } from "element-plus-fast-form";
+import { h, resolveComponent } from "vue";
+import type { IOperateButtonProps } from "element-plus-fast-form";
+
+// 使用 h 函数自定义按钮
+function renderAddButton(props: IOperateButtonProps) {
+  return h(resolveComponent("el-button"), {
+    type: "primary",
+    size: "small",
+    icon: "Plus",
+    onClick: props.onClick,
+  }, "添加成员");
+}
+
+function renderDeleteButton(props: IOperateButtonProps) {
+  if (props.length <= 1) {
+    return null; // 只有一项时不显示删除按钮
+  }
+  return h(resolveComponent("el-button"), {
+    type: "danger",
+    size: "small",
+    icon: "Delete",
+    onClick: props.onClick,
+  }, "删除");
+}
+
+const { FastForm, formValue } = useForm({
+  formConfig: [
+    {
+      formItemProps: { prop: "children", label: "项目成员" },
+      children: [
+        [
+          {
+            component: "el-input",
+            formItemProps: {
+              prop: "name",
+              label: "成员姓名",
+            },
+            componentProps: {
+              placeholder: "请输入成员姓名",
+            },
+          },
+        ],
+      ],
+    },
+  ],
+  showOperate: true,
+  operatePosition: 'tr', // 右上角
+  showOperateAdd: true,
+  showOperateDelete: true,
+  operateButtons: {
+    addButton: renderAddButton,
+    deleteButton: renderDeleteButton,
+  },
+});
+```
