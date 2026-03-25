@@ -47,7 +47,7 @@
 ### 4. 嵌套表单（表单列表）
 
 - 支持数组形式的嵌套表单结构
-- 提供 addItem 和 removeItem 方法动态增删列表项
+- 提供 addItem 和 removeItem 方法动态增删列表列
 - 每个列表项可包含多个表单字段
 - 支持在嵌套表单中使用插槽或自定义组件
 - **自定义操作按钮**：支持自定义添加/删除按钮的样式、位置和显示逻辑
@@ -149,8 +149,8 @@ function useForm(config: IFormProps): IUseForm;
 
 | 方法名            | 入参类型                                          | 返回类型 | 作用说明                                    |
 | ----------------- | ------------------------------------------------- | -------- | ------------------------------------------- |
-| addItem           | prop: string, config?: IFormconfig[]              | void     | 添加嵌套表单（config 不传则添加相同的表单） |
-| removeItem        | prop: string, key: number                         | void     | 删除嵌套表单（如数组表单 remove）           |
+| addItem           | prop: string, config?: IFormconfig[]              | void     | 添加嵌套表单列（config 不传则添加相同的表单） |
+| removeItem        | prop: string, key: number                         | void     | 删除嵌套表单列（如数组表单 remove）           |
 | setComponentProps | prop: string, componentProps: Record<string, any> | void     | 动态设置表单项组件属性（支持嵌套）          |
 | setFormValue      | formData: Record<string, any>                     | void     | 动态设置表单数据                            |
 | setFormConfig     | prop: string, config: Partial<IFormconfig>        | void     | 动态设置表单项配置（支持嵌套）              |
@@ -376,9 +376,9 @@ export interface IUseForm {
   rawFormValue: FormValueType;
   /** el-form 实例引用 */
   formRef: Ref<FormInstance | undefined>;
-  /** 添加嵌套表单项（如数组表单 push） */
+  /** 添加嵌套表单列（如数组表单 push） */
   addItem: (prop: string, config?: IFormconfig[]) => void;
-  /** 删除嵌套表单项（如数组表单 remove） */
+  /** 删除嵌套表单列（如数组表单 remove） */
   removeItem: (prop: string, key: number) => void;
   /** 动态设置表单项组件属性（支持嵌套格式：parentProp.index.childProp） */
   setComponentProps: (
@@ -467,9 +467,9 @@ interface CustomComponentProps {
   [key: string]: any; // 来自 itemConfig.componentProps
 
   // Form 类的所有公共方法：
-  /** 添加嵌套表单项 */
+  /** 添加嵌套表单列 */
   addItem: (prop: string, config?: IFormconfig[]) => void;
-  /** 删除嵌套表单项 */
+  /** 删除嵌套表单列 */
   removeItem: (prop: string, key: number) => void;
   /** 动态设置表单项组件属性（支持嵌套格式：parentProp.index.childProp） */
   setComponentProps: (
